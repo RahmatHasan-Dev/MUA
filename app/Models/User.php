@@ -2,33 +2,48 @@
 
 namespace App\Models;
 
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    // Map to the 'pengguna' table from your SQL
-    protected $table = 'pengguna';
+    protected $table = 'pengguna'; // Mapping ke tabel pengguna
 
-    // The table does not have created_at/updated_at timestamps
-    public $timestamps = false;
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'nama',
         'email',
         'password',
-        'tgl_lahir',
         'no_hp',
+        'tgl_lahir',
+        'role',
+        'is_active',
+        'foto_profil',
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
     protected $hidden = [
         'password',
+        'remember_token',
     ];
 
     protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
         'tgl_lahir' => 'date',
+        'is_active' => 'boolean',
     ];
 }

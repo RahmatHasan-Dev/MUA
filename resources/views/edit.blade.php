@@ -93,33 +93,7 @@
 
 <body>
     <!-- Navbar (Menggunakan struktur yang sama dengan halaman lain) -->
-    <header id="header">
-        <nav class="container">
-            <a href="{{ route('home') }}" class="logo">
-                <i class="bi bi-tree"></i>
-                Menadah Untuk Alam
-            </a>
-            <ul class="nav-links">
-                <li><a href="{{ route('home') }}">Beranda</a></li>
-                <li><a href="{{ route('donasi') }}">Donasi</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle active">
-                        <i class="bi bi-person-circle"></i> {{ Auth::user()->nama }}
-                    </a>
-                    <ul class="dropdown-content">
-                        <li><a href="{{ route('profile.edit') }}">Edit Profil</a></li>
-                        <li><a href="{{ route('settings') }}">Pengaturan</a></li>
-                        <li>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <a href="#" onclick="this.closest('form').submit()">Logout</a>
-                            </form>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-    </header>
+    @include('partials.navbar')
 
     <div class="profile-container">
         <div class="profile-card">

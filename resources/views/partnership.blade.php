@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
@@ -7,138 +7,377 @@
     <title>Partnership | MUA - Konservasi Alam Indonesia</title>
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style-partnership.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #fff;
-            font-family: 'Segoe UI', sans-serif;
-            overflow-x: hidden;
+        :root {
+            --primary-green: #10b981;
+            --secondary-green: #059669;
+            --dark-green: #065f46;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            --text-light: #ecfdf5;
+        }
+
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Layout & Animation Styles */
-        .section {
-            padding: 80px 0;
-            overflow: hidden;
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at center, #059669 0%, #064e3b 100%);
+            color: #fff;
+            overflow-x: hidden;
         }
 
-        .section-title {
+        /* --- Parallax Background Wrapper --- */
+        .parallax-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            background-image: url('https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=2500&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            filter: brightness(0.5) contrast(1.1);
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            padding-top: 120px;
+            padding-bottom: 80px;
+            background: linear-gradient(to bottom, transparent 0%, rgba(5, 150, 105, 0.8) 30%, #065f46 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Typography --- */
+        .page-title {
             text-align: center;
-            color: #1b4332;
             margin-bottom: 60px;
-            font-size: 2.5rem;
-            font-weight: 700;
         }
 
+        .page-title h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #6ee7b7, #fff, #6ee7b7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .page-title p {
+            font-size: 1.1rem;
+            color: #a7f3d0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* --- Hero Section (Integrated) --- */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 80px;
+            padding: 0 20px;
+        }
+
+        .hero-description {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #d1fae5;
+        }
+
+        .btn-glow {
+            display: inline-block;
+            padding: 12px 35px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-glow:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+            color: white;
+        }
+
+        /* --- Partner Lines --- */
         .line {
             display: flex;
             align-items: center;
-            margin-bottom: 80px;
             width: 100%;
-            /* Animation Initial State */
-            opacity: 0;
-            transform: translateX(-50px);
-            transition: all 1s ease-out;
-        }
-
-        /* Animation Active State */
-        .line.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Alternate animation direction for even lines */
-        .line:nth-child(even) {
-            transform: translateX(50px);
-        }
-
-        .line:nth-child(even).visible {
-            transform: translateX(0);
+            margin-bottom: 60px;
         }
 
         .tag {
-            background: #1b4332;
-            color: white;
-            padding: 20px 40px;
-            border-radius: 0 50px 50px 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 15px 40px;
+            border-radius: 50px;
             min-width: 250px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .partnertag {
-            margin: 0;
-            font-size: 1.2rem;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
             font-weight: 600;
             letter-spacing: 1px;
         }
 
+        .partnertag {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
         .tag.tagright {
-            border-radius: 50px 0 0 50px;
             order: 2;
             margin-left: auto;
         }
 
         .tag.tagleft {
-            border-radius: 0 50px 50px 0;
             margin-right: auto;
         }
 
-        .wrapper {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
+        /* Marquee Container */
+        .marquee-container {
             flex: 1;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            overflow: hidden;
+            position: relative;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            padding: 30px 0;
         }
 
-        /* Partner Cards */
-        .partnernormal,
-        .partnerexclusive,
-        .partnerlicense {
-            background: white;
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: scroll 15s linear infinite;
+            will-change: transform;
+        }
+
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+
+        .marquee-reverse .marquee-track {
+            animation-direction: reverse;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Partner Items */
+        .partner-item {
+            cursor: pointer;
+            margin-right: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            /* Glassmorphism Light */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.3s;
-            border-radius: 10px;
-            padding: 10px;
+            border-radius: 24px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.2);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: box-shadow 0.4s ease, background 0.4s ease, border-color 0.4s ease;
+        }
+
+        /* Efek Kilau (Glare) */
+        .partner-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .partner-item:hover::before {
+            left: 150%;
+            transition: 0.7s;
         }
 
         .partnernormal {
-            width: 120px;
-            height: 80px;
-            border: 1px solid #eee;
+            width: 180px;
+            height: 110px;
         }
 
         .partnerexclusive {
-            width: 200px;
-            height: 120px;
-            border: 2px solid #10b981;
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.1);
+            width: 260px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.15);
+            /* Slightly lighter for exclusive */
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .partnerlicense {
-            width: 120px;
-            height: 80px;
-            border-bottom: 4px solid #1b4332;
+            width: 180px;
+            height: 110px;
         }
 
-        .partnernormal:hover,
-        .partnerexclusive:hover,
-        .partnerlicense:hover {
-            transform: scale(1.05);
+        .partner-item:hover {
+            border-color: rgba(16, 185, 129, 0.6);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
         }
 
-        img {
-            max-width: 90%;
-            max-height: 90%;
+        .partner-item img {
+            max-width: 85%;
+            max-height: 85%;
             object-fit: contain;
+            transition: transform 0.6s ease;
+            filter: brightness(0) invert(1);
+            /* Make logos white for dark theme */
+        }
+
+        .partner-item:hover img {
+            transform: scale(1.1);
+            filter: brightness(1);
+            /* Show original color on hover */
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: rgba(20, 20, 20, 0.9);
+            backdrop-filter: blur(25px);
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9) translateY(20px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #fff;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close:hover {
+            color: var(--primary-green);
+        }
+
+        .modal-logo {
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .modal-content h3 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        .modal-content p {
+            color: #d1d5db;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glow-blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
         }
 
         /* Mobile Responsive */
@@ -146,11 +385,7 @@
             .line {
                 flex-direction: column;
                 gap: 20px;
-                transform: translateY(30px);
-            }
-
-            .line:nth-child(even) {
-                transform: translateY(30px);
+                margin-bottom: 40px;
             }
 
             .tag {
@@ -160,8 +395,8 @@
                 margin: 0 auto;
             }
 
-            .wrapper {
-                width: 100%;
+            .page-title h1 {
+                font-size: 2rem;
             }
 
             .partnertag.desktop {
@@ -178,501 +413,179 @@
                 display: none;
             }
         }
-
-        :root {
-            --primary-green: #10b981;
-            --secondary-green: #059669;
-            --dark-green: #065f46;
-            --light-green: #d1fae5;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
-            --white: #ffffff;
-            --background: #f9fafb;
-            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
-            --border-radius: 12px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Header Styles */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: var(--shadow);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-green);
-            text-decoration: none;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-            align-items: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-links a {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--primary-green);
-            background: var(--light-green);
-        }
-
-        /* Dropdown Styles */
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-toggle {
-            cursor: pointer;
-        }
-
-        .dropdown-content {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: var(--white);
-            min-width: 220px;
-            box-shadow: var(--shadow);
-            border-radius: var(--border-radius);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: var(--transition);
-            z-index: 1000;
-            border: 1px solid #e5e7eb;
-            padding: 0.5rem 0;
-        }
-
-        .dropdown:hover .dropdown-content,
-        .dropdown.active .dropdown-content {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-content li {
-            list-style: none;
-        }
-
-        .dropdown-content a {
-            display: flex;
-            padding: 0.8rem 1.2rem;
-            color: var(--text-dark);
-            text-decoration: none;
-            transition: var(--transition);
-            border-radius: 0;
-            background: transparent;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .dropdown-content a:hover {
-            background: var(--light-green);
-            color: var(--primary-green);
-            padding-left: 1.5rem;
-        }
-
-        /* Mobile Menu */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            padding: 0.5rem;
-            gap: 4px;
-        }
-
-        .menu-toggle span {
-            width: 25px;
-            height: 3px;
-            background: var(--text-dark);
-            transition: var(--transition);
-            border-radius: 2px;
-        }
-
-        .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: flex;
-            }
-
-            .nav-links {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: var(--white);
-                flex-direction: column;
-                padding: 1rem 0;
-                box-shadow: var(--shadow);
-                opacity: 0;
-                visibility: hidden;
-                transform: translateY(-20px);
-                transition: var(--transition);
-            }
-
-            .nav-links.active {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0);
-            }
-
-            .nav-links li {
-                width: 100%;
-                text-align: center;
-            }
-
-            .nav-links a {
-                justify-content: center;
-                width: 90%;
-                margin: 0 auto;
-            }
-
-            .dropdown-content {
-                position: static;
-                box-shadow: none;
-                border: none;
-                background: #f9fafb;
-                display: none;
-                opacity: 1;
-                visibility: visible;
-                transform: none;
-                width: 100%;
-            }
-
-            .dropdown.active .dropdown-content {
-                display: block;
-            }
-        }
     </style>
 </head>
 
 <body>
     <!-- Header/Navbar -->
-    <header id="header">
-        <nav class="container">
-            <a href="{{ url('/') }}" class="logo">
-                <i class="bi bi-tree"></i>
-                Menadah Untuk Alam
-            </a>
-            <div class="menu-toggle" id="menuToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <ul class="nav-links" id="navLinks">
-                <li>
-                    <a href="{{ url('/#home') }}">
-                        <i class="bi bi-house"></i>
-                        Beranda
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url('/#program') }}">
-                        <i class="bi bi-clipboard-check"></i>
-                        Program
-                    </a>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle">
-                        <i class="bi bi-info-circle"></i>
-                        Tentang
-                        <i class="bi bi-chevron-down" style="font-size: 0.8em; margin-left: 5px;"></i>
-                    </a>
-                    <ul class="dropdown-content">
-                        <li><a href="{{ route('about') }}"><i class="bi bi-people"></i> Tentang Kami</a></li>
-                        <li><a href="{{ route('visimisi') }}"><i class="bi bi-eye"></i> Visi & Misi</a></li>
-                        <li><a href="{{ route('kegiatan') }}"><i class="bi bi-calendar-event"></i> Kegiatan</a></li>
-                        <li><a href="{{ route('fun-fact') }}"><i class="bi bi-lightbulb"></i> Fun Fact</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="{{ route('partnership') }}">
-                        <i class="bi bi-person-up"></i>
-                        Partnership
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('donasi') }}">
-                        <i class="bi bi-heart"></i>
-                        Donasi
-                    </a>
-                </li>
-                @auth
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle">
-                            <i class="bi bi-person-circle"></i> {{ Auth::user()->nama }}
-                            <i class="bi bi-chevron-down" style="font-size: 0.8em; margin-left: 5px;"></i>
-                        </a>
-                        <ul class="dropdown-content">
-                            <li><a href="{{ route('profile.edit') }}"><i class="bi bi-pencil-square"></i> Edit Profil</a>
-                            </li>
-                            <li><a href="#"><i class="bi bi-gear"></i> Pengaturan</a></li>
-                            <li>
-                                <form action="{{ route('logout') }}" method="POST" style="margin:0;">
-                                    @csrf
-                                    <button type="submit"
-                                        style="background:none; border:none; color:inherit; cursor:pointer; font:inherit; padding: 0.8rem 1.2rem; text-align: left; width: 100%; display: flex; align-items: center; gap: 0.5rem;"><i
-                                            class="bi bi-box-arrow-right"></i> Logout</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                @else
-                    <li><a href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
-                    <li><a href="{{ route('register') }}"><i class="bi bi-person-plus"></i> Register</a></li>
-                @endauth
-            </ul>
-        </nav>
-    </header>
+    @include('partials.navbar')
 
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h1>Bersama-sama Melestarikan Keanekaragaman Hayati</h1>
-            <p>
+    <!-- Parallax Background -->
+    <div class="parallax-wrapper"></div>
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+
+        <!-- Decorative Glows -->
+        <div class="glow-blob" style="top: 0; left: -10%;"></div>
+        <div class="glow-blob" style="bottom: 10%; right: -10%;"></div>
+
+        <!-- Hero Section (Integrated) -->
+        <div class="container hero-section fade-up">
+            <div class="page-title">
+                <p>Kolaborasi Untuk Alam</p>
+                <h1>Partner Kami</h1>
+            </div>
+
+            <h2 class="hero-headline">Bersama-sama Melestarikan Keanekaragaman Hayati</h2>
+            <p class="hero-description">
                 Seperti koloni semut yang mengangkut makanannya, kami selalu bekerjasama dengan banyak pihak luar biasa
-                lainnya untuk menjaga keanekaragaman hayati alam kita..
+                lainnya untuk menjaga keanekaragaman hayati alam kita.
             </p>
-            <a href="#partnership" class="btn">
+
+            <a href="#partnership-list" class="btn-glow">
                 <i class="bi bi-arrow-down-circle"></i>
                 Siapa saja mereka?
             </a>
         </div>
-        <div class="scroll-indicator">
-            <i class="bi bi-chevron-double-down"></i>
+
+        <!-- Partners List -->
+        <div class="container" id="partnership-list">
+            @if (isset($partnerships))
+                @php
+                    // Mengelompokkan partner berdasarkan kategori untuk efisiensi
+                    $groupedPartners = $partnerships->groupBy(function ($item) {
+                        return strtolower(trim($item->kategori));
+                    });
+
+                    $regulerPartners = $groupedPartners->get('reguler', collect());
+                    $eksklusifPartners = $groupedPartners->get('eksklusif', collect());
+                    $pengawasanPartners = $groupedPartners->get('pengawasan', collect());
+                @endphp
+
+                <!-- Partner Reguler -->
+                @if ($regulerPartners->isNotEmpty())
+                    <div class="line fade-up">
+                        <div class="tag">
+                            <p class="partnertag">Partner Reguler</p>
+                        </div>
+                        <div class="marquee-container">
+                            <div class="marquee-track">
+                                @foreach (range(1, 2) as $_)
+                                    {{-- Duplikasi untuk marquee --}}
+                                    @foreach ($regulerPartners as $partnership)
+                                        @php
+                                            $logoUrl = \Illuminate\Support\Str::startsWith(
+                                                $partnership->logo,
+                                                'images/',
+                                            )
+                                                ? asset($partnership->logo)
+                                                : asset('storage/' . $partnership->logo);
+                                        @endphp
+                                        <div class="partnernormal partner-item" onclick="openPartnerModal(this)"
+                                            data-name="{{ $partnership->name }}"
+                                            data-desc="{{ $partnership->description ?? 'Partner konservasi alam Indonesia' }}"
+                                            data-id="{{ $partnership->id }}"
+                                            data-link="{{ $partnership->website_url ?? '#' }}"
+                                            data-img="{{ $logoUrl }}">
+                                            <img src="{{ $logoUrl }}" alt="{{ $partnership->name }}">
+                                        </div>
+                                    @endforeach
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Partner Eksklusif -->
+                @if ($eksklusifPartners->isNotEmpty())
+                    <div class="line marquee-reverse fade-up">
+                        <div class="tag tagright">
+                            <p class="partnertag desktop">Partner Eksklusif</p>
+                        </div>
+                        <div class="marquee-container">
+                            <div class="marquee-track">
+                                @foreach (range(1, 2) as $_)
+                                    {{-- Duplikasi untuk marquee --}}
+                                    @foreach ($eksklusifPartners as $partnership)
+                                        @php
+                                            $logoUrl = \Illuminate\Support\Str::startsWith(
+                                                $partnership->logo,
+                                                'images/',
+                                            )
+                                                ? asset($partnership->logo)
+                                                : asset('storage/' . $partnership->logo);
+                                        @endphp
+                                        <div class="partnerexclusive partner-item" onclick="openPartnerModal(this)"
+                                            data-name="{{ $partnership->name }}"
+                                            data-desc="{{ $partnership->description ?? 'Partner Eksklusif MUA' }}"
+                                            data-id="{{ $partnership->id }}"
+                                            data-link="{{ $partnership->website_url ?? '#' }}"
+                                            data-img="{{ $logoUrl }}">
+                                            <img src="{{ $logoUrl }}" alt="{{ $partnership->name }}">
+                                        </div>
+                                    @endforeach
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Dibawah Pengawasan -->
+                @if ($pengawasanPartners->isNotEmpty())
+                    <div class="line fade-up">
+                        <div class="tag tagleft">
+                            <p class="partnertag">Dibawah Pengawasan</p>
+                        </div>
+                        <div class="marquee-container">
+                            <div class="marquee-track">
+                                @foreach (range(1, 2) as $_)
+                                    {{-- Duplikasi untuk marquee --}}
+                                    @foreach ($pengawasanPartners as $partnership)
+                                        @php
+                                            $logoUrl = \Illuminate\Support\Str::startsWith(
+                                                $partnership->logo,
+                                                'images/',
+                                            )
+                                                ? asset($partnership->logo)
+                                                : asset('storage/' . $partnership->logo);
+                                        @endphp
+                                        <div class="partnerlicense partner-item" onclick="openPartnerModal(this)"
+                                            data-name="{{ $partnership->name }}"
+                                            data-desc="{{ $partnership->description ?? 'Dibawah Pengawasan' }}"
+                                            data-id="{{ $partnership->id }}"
+                                            data-link="{{ $partnership->website_url ?? '#' }}"
+                                            data-img="{{ $logoUrl }}">
+                                            <img src="{{ $logoUrl }}" alt="{{ $partnership->name }}">
+                                        </div>
+                                    @endforeach
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endif
         </div>
-    </section>
-
-    <!-- Partners Section -->
-    <section class="section" id="partnership">
-        <div class="container">
-            <h2 class="section-title fade-in fs-4">Partner Kami</h2>
-
-            <div class="line fade-in">
-                <div class="tag">
-                    <p class="partnertag">Partner Reguler</p>
-                </div>
-                <div class="wrapper">
-                    <div class="partnernormal partnernormal1"><a href="https://oceana.org/homepage/home/"><img
-                                src="{{ asset('oceana.png') }}" alt=""></a></div>
-                    <div class="partnernormal partnernormal2"><a href="https://www.sierraclub.org/"><img
-                                src="{{ asset('sierraclub.png') }}" alt=""></a></div>
-                    <div class="partnernormal partnernormal3"><a href="https://www.walhi.or.id/"><img
-                                src="{{ asset('rainforest.png') }}" alt=""></a></div>
-                    <div class="partnernormal partnernormal4"><a href="https://www.walhi.or.id/"><img
-                                src="{{ asset('walhi.png') }}" alt=""></a></div>
-                    <div class="partnernormal partnernormal5"><a href="https://janegoodall.org/"><img
-                                src="{{ asset('janegoodall.png') }}" alt=""></a></div>
-                    <div class="partnernormal partnernormal6"><a href="https://parley.tv/"><img
-                                src="{{ asset('parley.png') }}" alt=""></a></div>
-                    <div class="partnernormal partnernormal7"><a href="{{ asset('last call.mp3') }}"><img
-                                src="{{ asset('tcd.png') }}" alt=""></a></div>
-                </div>
-                <div class="tag"></div>
-            </div>
-
-            <div class="line fade-in excusive">
-                <div class="tag"></div>
-                <p class="partnertag mobile">Partner Ekskulsif</p>
-                <div class="wrapper">
-                    <div class="partnerexclusive partnerexclusive1"><a href="http://www.wwf.id/id"><img
-                                src="{{ asset('wwf.png') }}" alt=""></a></div>
-                    <div class="partnerexclusive partnerexclusive2"><a href="https://nationalgeographic.grid.id/"><img
-                                src="{{ asset('natgeo.png') }}" alt=""></a></div>
-                </div>
-                <div class="tag tagright">
-                    <p class="partnertag desktop">Partner Ekskulsif</p>
-                </div>
-            </div>
-
-            <div class="line fade-in">
-                <div class="tag tagleft">
-                    <p class="partnertag">Dibawah Pengawasan</p>
-                </div>
-                <div class="wrapper">
-                    <div class="partnerlicense partnerlicense1"><a href="https://kemenlh.go.id/"><img
-                                src="{{ asset('menlhk.png') }}" alt=""></a></div>
-                    <div class="partnerlicense partnerlicense2"><a href="https://www.menlhk.go.id/"><img
-                                src="{{ asset('menlhk2.png') }}" alt=""></a></div>
-                    <div class="partnerlicense partnerlicense3"><a href="https://ditjenpkh.pertanian.go.id/"><img
-                                src="{{ asset('menlhk3.png') }}" alt=""></a></div>
-                </div>
-                <div class="tag"></div>
-            </div>
-        </div>
-    </section>
+    </div>
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-col">
-                    <h4>
-                        <i class="bi bi-tree"></i>
-                        Menadah Untuk Alam
-                    </h4>
-                    <p>
-                        Organisasi nirlaba yang berfokus pada konservasi keanekaragaman
-                        hayati dan pemberdayaan masyarakat Indonesia.
-                    </p>
-                </div>
-                <div class="footer-col">
-                    <h4>
-                        <i class="bi bi-link-45deg"></i>
-                        Tautan Cepat
-                    </h4>
-                    <ul>
-                        <li>
-                            <i class="bi bi-chevron-right"></i>
-                            <a href="{{ route('about') }}">Tentang Kami</a>
-                        </li>
-                        <li>
-                            <i class="bi bi-chevron-right"></i>
-                            <a href="{{ route('visimisi') }}">Visi Misi</a>
-                        </li>
-                        <li>
-                            <i class="bi bi-chevron-right"></i>
-                            <a href="{{ route('kegiatan') }}">Kegiatan</a>
-                        </li>
-                        <li>
-                            <i class="bi bi-chevron-right"></i>
-                            <a href="{{ route('fun-fact') }}">Fun Fact</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>
-                        <i class="bi bi-telephone"></i>
-                        Kontak Kami
-                    </h4>
-                    <ul>
-                        <li>
-                            <i class="bi bi-envelope"></i>
-                            novandidirobi@students.amikom.ac.id
-                        </li>
-                        <li>
-                            <i class="bi bi-phone"></i>
-                            +62 123 4567 890
-                        </li>
-                        <li>
-                            <i class="bi bi-geo-alt"></i>
-                            Daerah Istimewa Yogyakarta, Indonesia
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2024 MUA. Hak Cipta Dilindungi.</p>
-            </div>
+    @include('partials.footer')
+
+    <!-- Partner Detail Modal -->
+    <div id="partnerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePartnerModal()">&times;</span>
+            <img id="modalLogo" src="" alt="Partner Logo" class="modal-logo">
+            <h3 id="modalName"></h3>
+            <p id="modalDesc"></p>
+            <a id="modalLink" href="#" target="_blank" class="btn-glow">
+                <i class="bi bi-box-arrow-up-right"></i>
+                Kunjungi Website
+            </a>
         </div>
-    </footer>
+    </div>
 
     <script>
-        // Mobile menu toggle
-        const menuToggle = document.getElementById("menuToggle");
-        const navLinks = document.getElementById("navLinks");
-
-        menuToggle.addEventListener("click", () => {
-            menuToggle.classList.toggle("active");
-            navLinks.classList.toggle("active");
-        });
-
-        // Dropdown functionality
-        const dropdowns = document.querySelectorAll(".dropdown");
-
-        dropdowns.forEach((dropdown) => {
-            const toggle = dropdown.querySelector(".dropdown-toggle");
-
-            toggle.addEventListener("click", function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                // Toggle dropdown (berlaku untuk mobile & desktop)
-                dropdown.classList.toggle("active");
-
-                // Close other dropdowns
-                dropdowns.forEach((otherDropdown) => {
-                    if (otherDropdown !== dropdown) {
-                        otherDropdown.classList.remove("active");
-                    }
-                });
-            });
-        });
-
-        // Close dropdowns when clicking outside
-        document.addEventListener("click", function(e) {
-            if (!e.target.closest(".dropdown")) {
-                dropdowns.forEach((dropdown) => {
-                    dropdown.classList.remove("active");
-                });
-            }
-        });
-
-        // Close mobile menu when clicking on a link
-        navLinks.addEventListener("click", (e) => {
-            if (
-                e.target.tagName === "A" &&
-                !e.target.classList.contains("dropdown-toggle")
-            ) {
-                menuToggle.classList.remove("active");
-                navLinks.classList.remove("active");
-                // Close all dropdowns
-                dropdowns.forEach((dropdown) => {
-                    dropdown.classList.remove("active");
-                });
-            }
-        });
-
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach((anchor) => {
             anchor.addEventListener("click", function(e) {
@@ -701,10 +614,71 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll(".fade-in").forEach((el) => {
+        document.querySelectorAll(".fade-up").forEach((el) => {
             observer.observe(el);
         });
+
+        // 3D Tilt Effect Script
+        const cards = document.querySelectorAll('.partner-item');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                // Hitung rotasi (Max 15 derajat)
+                const rotateX = ((y - centerY) / centerY) * -15;
+                const rotateY = ((x - centerX) / centerX) * 15;
+
+                card.style.transform =
+                    `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+            });
+
+            card.addEventListener('mouseenter', () => {
+                card.style.transition =
+                    'box-shadow 0.4s ease, background 0.4s ease, border-color 0.4s ease, transform 0.1s linear';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transition =
+                    'box-shadow 0.4s ease, background 0.4s ease, border-color 0.4s ease, transform 0.5s ease';
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            });
+        });
+
+        // Modal Script
+        const modal = document.getElementById('partnerModal');
+
+        function openPartnerModal(element) {
+            const name = element.getAttribute('data-name');
+            const desc = element.getAttribute('data-desc');
+            const link = element.getAttribute('data-link');
+            const img = element.getAttribute('data-img');
+            const id = element.getAttribute('data-id');
+
+            document.getElementById('modalName').innerText = name;
+            document.getElementById('modalDesc').innerText = desc;
+            document.getElementById('modalLink').href = link;
+            document.getElementById('modalLogo').src = img;
+
+            modal.style.display = "flex";
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
+
+        function closePartnerModal() {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = "none";
+            }, 300);
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closePartnerModal();
+            }
+        }
     </script>
 </body>
-
-</html>

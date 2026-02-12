@@ -8,104 +8,361 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Midtrans Snap JS -->
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
         data-client-key="{{ config('midtrans.client_key') }}"></script>
+    <!-- SweetAlert2 & Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
+        :root {
+            --primary-green: #10b981;
+            --secondary-green: #059669;
+            --dark-green: #065f46;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            --text-light: #ecfdf5;
+        }
+
         body {
-            font-family: sans-serif;
-            background: white;
-            color: rgb(8, 8, 8);
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at center, #059669 0%, #064e3b 100%);
+            color: #fff;
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- Parallax Background Wrapper --- */
+        .parallax-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            background-image: url('https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            filter: brightness(0.4) contrast(1.1);
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
             padding-top: 120px;
+            padding-bottom: 80px;
+            background: linear-gradient(to bottom, transparent 0%, rgba(6, 78, 59, 0.8) 30%, #064e3b 100%);
         }
 
         h2 {
             text-align: center;
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+            font-size: 2.5rem;
         }
 
         .section {
             display: none;
-            max-width: 900px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            max-width: 1100px;
             margin: auto;
-            background: #f0fff4;
-            padding: 40px;
-            border-radius: 10px;
+            background: transparent;
+            padding: 20px;
         }
 
         .active {
             display: block;
         }
 
+        .visible {
+            opacity: 1;
+        }
+
         .donasi-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            gap: 30px;
+            margin-top: 40px;
+            padding: 10px;
         }
 
         .donasi-item {
-            background: white;
-            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 24px;
             overflow: hidden;
-            transition: 0.3s ease;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.4s ease, background 0.4s ease, border-color 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Glossy Glare Effect */
+        .donasi-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.15) 50%, transparent 60%);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+            pointer-events: none;
+            z-index: 10;
         }
 
         .donasi-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border-color: #2d6a4f;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .donasi-item:hover::before {
+            left: 150%;
+            transition: 0.7s;
         }
 
         .donasi-item img {
             width: 100%;
-            height: 180px;
+            height: 220px;
             object-fit: cover;
+            transition: transform 0.1s ease-out;
         }
 
+        /* Hover scale handled by JS Parallax */
+
         .donasi-item-content {
-            padding: 15px;
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .donasi-item h3,
         .donasi-item p {
             margin: 0 0 10px;
-            color: #555;
         }
 
         .donasi-item h3 {
-            color: #2d6a4f;
+            color: #fff;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .donasi-item p {
+            color: #d1d5db;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            flex-grow: 1;
         }
 
         input,
         select,
-        button,
         .btn {
             width: 100%;
             padding: 10px;
             margin: 5px 0 15px;
-            border: 1px solid #d8f3dc;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 5px;
-            background: white;
-            color: #333;
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
             cursor: pointer;
             box-sizing: border-box;
+        }
+
+        /* Button Styling */
+        .donasi-item button,
+        .btn-glow {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 50px;
+            /* Glassmorphism Green Glowing */
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .donasi-item button:hover,
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+            color: white;
+        }
+
+        .btn-detail {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #d1fae5;
+            margin-top: 10px;
+            box-shadow: none;
+        }
+
+        .btn-detail:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-color: #fff;
         }
 
         input:focus,
         select:focus {
             outline: none;
-            border-color: #2d6a4f;
-            box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
+            border-color: var(--primary-green);
+            background: rgba(0, 0, 0, 0.5);
         }
 
-        button:hover,
-        .btn:hover {
-            background: #1b4332;
+        /* Progress Bar Styles */
+        .progress-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            height: 12px;
+            width: 100%;
+            margin: 15px 0 10px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #34d399, #10b981);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            color: #a7f3d0;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Top Donatur / Leaderboard Styles */
+        .leaderboard-container {
+            margin-top: 50px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .leaderboard-title {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 25px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .leaderboard-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.02) translateX(5px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.1);
+            border-color: var(--primary-green);
+        }
+
+        .rank-badge {
+            width: 35px;
+            height: 35px;
+            background: #2d6a4f;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .rank-1 {
+            background: #FFD700;
+            color: #555;
+        }
+
+        /* Gold */
+        .rank-2 {
+            background: #C0C0C0;
+            color: #555;
+        }
+
+        /* Silver */
+        .rank-3 {
+            background: #CD7F32;
+            color: white;
+        }
+
+        /* Bronze */
+
+        .donor-info {
+            flex-grow: 1;
+        }
+
+        .donor-name {
+            font-weight: bold;
+            color: #fff;
+            margin: 0;
+        }
+
+        .donor-amount {
+            font-size: 0.9rem;
+            color: #6ee7b7;
+            margin: 0;
+        }
+
+        /* General Button for Forms */
+        button {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-submit:hover,
+        .section button:not(.donasi-item button):hover {
+            background: var(--dark-green);
+            color: white;
         }
 
         ul {
@@ -164,7 +421,7 @@
         }
 
         .payment-card-box {
-            border: 2px solid #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             padding: 15px;
             text-align: center;
@@ -173,23 +430,24 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
             justify-content: center;
-            background: white;
-            color: #666;
+            background: rgba(0, 0, 0, 0.2);
+            color: #d1d5db;
         }
 
         .payment-card-box i {
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin-bottom: 10px;
-            color: #2d6a4f;
+            color: var(--primary-green);
         }
 
         .payment-card-label input:checked+.payment-card-box {
-            border-color: #2d6a4f;
-            background-color: #f0fff4;
+            border-color: var(--primary-green);
+            background-color: rgba(16, 185, 129, 0.1);
             box-shadow: 0 8px 20px rgba(45, 106, 79, 0.15);
             transform: translateY(-3px);
-            color: #1b4332;
+            color: #fff;
             font-weight: bold;
         }
 
@@ -197,19 +455,21 @@
         .custom-file-upload {
             display: block;
             padding: 20px;
-            border: 2px dashed #a8d5ba;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
             border-radius: 10px;
             text-align: center;
             cursor: pointer;
-            background: #fcfdfd;
+            background: rgba(0, 0, 0, 0.2);
             transition: 0.3s;
-            color: #555;
+            color: #d1d5db;
             margin-bottom: 20px;
+            font-weight: 500;
         }
 
         .custom-file-upload:hover {
-            border-color: #2d6a4f;
-            background: #f0fff4;
+            border-color: var(--primary-green);
+            background: rgba(16, 185, 129, 0.1);
+            color: #fff;
         }
 
         /* Filter Dropdown */
@@ -245,704 +505,1045 @@
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Header Styles */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: var(--shadow);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-green);
-            text-decoration: none;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-            align-items: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-links a {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--primary-green);
-            background: var(--light-green);
-        }
-
-        /* Dropdown Styles */
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-toggle {
-            cursor: pointer;
-        }
-
-        .dropdown-content {
+        /* Glow Blob Decoration */
+        .glow-blob {
             position: absolute;
-            top: 100%;
-            left: 0;
-            background: var(--white);
-            min-width: 220px;
-            box-shadow: var(--shadow);
-            border-radius: var(--border-radius);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: var(--transition);
-            z-index: 1000;
-            border: 1px solid #e5e7eb;
-            padding: 0.5rem 0;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
         }
 
-        .dropdown:hover .dropdown-content,
-        .dropdown.active .dropdown-content {
+        @keyframes floatUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-100px) translateX(50px);
+                opacity: 0;
+            }
+        }
+
+        /* Rain Effect */
+        .rain-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .raindrop {
+            position: absolute;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.4));
+            width: 1px;
+            height: 80px;
+            top: -100px;
+        }
+
+        @keyframes rain-fall {
+            0% {
+                transform: translateY(-100px);
+            }
+
+            100% {
+                transform: translateY(900px);
+            }
+        }
+
+        .nominal-presets {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .preset-btn {
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.2);
+            color: #d1fae5;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        .preset-btn:hover {
+            border-color: var(--primary-green);
+            background: rgba(16, 185, 129, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .preset-btn.active {
+            background: var(--primary-green);
+            color: white;
+            border-color: var(--primary-green);
+            box-shadow: 0 4px 10px rgba(45, 106, 79, 0.3);
+        }
+
+        /* Animation Fade In Up */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .fade-in.visible {
             opacity: 1;
-            visibility: visible;
             transform: translateY(0);
         }
 
-        .dropdown-content li {
-            list-style: none;
-        }
-
-        .dropdown-content a {
-            display: flex;
-            padding: 0.8rem 1.2rem;
-            color: var(--text-dark);
-            text-decoration: none;
-            transition: var(--transition);
-            border-radius: 0;
-            background: transparent;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .dropdown-content a:hover {
-            background: var(--light-green);
-            color: var(--primary-green);
-            padding-left: 1.5rem;
-        }
-
-        /* Mobile Menu */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            padding: 0.5rem;
-            gap: 4px;
-        }
-
-        .menu-toggle span {
-            width: 25px;
-            height: 3px;
-            background: var(--text-dark);
-            transition: var(--transition);
-            border-radius: 2px;
-        }
-
-        .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: flex;
-            }
-
-            .nav-links {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: var(--white);
-                flex-direction: column;
-                padding: 1rem 0;
-                box-shadow: var(--shadow);
+        @keyframes fadeInUp {
+            from {
                 opacity: 0;
-                visibility: hidden;
-                transform: translateY(-20px);
-                transition: var(--transition);
+                transform: translateY(30px);
             }
 
-            .nav-links.active {
+            to {
                 opacity: 1;
-                visibility: visible;
                 transform: translateY(0);
             }
+        }
 
-            .nav-links li {
-                width: 100%;
-                text-align: center;
+        /* Loading Overlay */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        #loading-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #d1fae5;
+            border-top: 5px solid #10b981;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
             }
 
-            .nav-links a {
-                justify-content: center;
-                width: 90%;
-                margin: 0 auto;
+            100% {
+                transform: rotate(360deg);
             }
+        }
 
-            .dropdown-content {
-                position: static;
-                box-shadow: none;
-                border: none;
-                background: #f9fafb;
-                display: none;
-                opacity: 1;
-                visibility: visible;
-                transform: none;
-                width: 100%;
-            }
+        /* Detail Section Styles */
+        .detail-header {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
 
-            .dropdown.active .dropdown-content {
-                display: block;
-            }
+        .detail-header img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+
+        .detail-content {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .detail-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            color: #a7f3d0;
+            font-size: 0.9rem;
+        }
+
+        .recent-donors-list {
+            margin-top: 20px;
+            border-top: 1px dashed #e5e7eb;
+            padding-top: 20px;
+        }
+
+        .recent-donor-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- Social Share Buttons (Glowing & Elegant) --- */
+        .share-container {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .share-label {
+            font-size: 0.9rem;
+            color: #d1d5db;
+            margin-bottom: 10px;
+            display: block;
+            font-weight: 500;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-share {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-share:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+            color: white;
+        }
+
+        .share-wa {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .share-fb {
+            background: linear-gradient(135deg, #1877F2, #1659b1);
+            box-shadow: 0 4px 15px rgba(24, 119, 242, 0.3);
+        }
+
+        .share-x {
+            background: linear-gradient(135deg, #000000, #333333);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- Form Enhancements (New) --- */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            margin-bottom: 0 !important;
+            /* Override default input margin */
+        }
+
+        .form-control:focus {
+            background: rgba(0, 0, 0, 0.5);
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+            outline: none;
+        }
+
+        .form-control[readonly] {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #9ca3af;
+            border-color: rgba(255, 255, 255, 0.1);
+            cursor: default;
+        }
+
+        /* Form Actions (Buttons) */
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn-primary-action {
+            flex: 2;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary-action:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.3);
+            filter: brightness(1.05);
+        }
+
+        .btn-secondary-action {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 16px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-secondary-action:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-color: #fff;
+            transform: translateY(-2px);
         }
     </style>
 </head>
 
 <body>
+    @include('navbar')
 
-    <!-- Header/Navbar -->
-    <header id="header">
-        <nav class="container">
-            <a href="{{ url('/') }}" class="logo">
-                <i class="bi bi-tree"></i>
-                Menadah Untuk Alam
-            </a>
-            <div class="menu-toggle" id="menuToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <ul class="nav-links" id="navLinks">
-                <li>
-                    <a href="{{ url('/#home') }}">
-                        <i class="bi bi-house"></i>
-                        Beranda
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url('/#program') }}">
-                        <i class="bi bi-clipboard-check"></i>
-                        Program
-                    </a>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle">
-                        <i class="bi bi-info-circle"></i>
-                        Tentang
-                        <i class="bi bi-chevron-down" style="font-size: 0.8em; margin-left: 5px;"></i>
-                    </a>
-                    <ul class="dropdown-content">
-                        <li><a href="{{ route('about') }}"><i class="bi bi-people"></i> Tentang Kami</a></li>
-                        <li><a href="{{ route('visimisi') }}"><i class="bi bi-eye"></i> Visi & Misi</a></li>
-                        <li><a href="{{ route('kegiatan') }}"><i class="bi bi-calendar-event"></i> Kegiatan</a></li>
-                        <li><a href="{{ route('fun-fact') }}"><i class="bi bi-lightbulb"></i> Fun Fact</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="{{ route('partnership') }}">
-                        <i class="bi bi-person-up"></i>
-                        Partnership
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('donasi') }}">
-                        <i class="bi bi-heart"></i>
-                        Donasi
-                    </a>
-                </li>
-                @auth
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle">
-                            <i class="bi bi-person-circle"></i> {{ Auth::user()->nama }}
-                            <i class="bi bi-chevron-down" style="font-size: 0.8em; margin-left: 5px;"></i>
-                        </a>
-                        <ul class="dropdown-content">
-                            <li><a href="{{ route('profile.edit') }}"><i class="bi bi-pencil-square"></i> Edit Profil</a>
-                            </li>
-                            <li><a href="#"><i class="bi bi-gear"></i> Pengaturan</a></li>
-                            <li>
-                                <form action="{{ route('logout') }}" method="POST" style="margin:0;">
-                                    @csrf
-                                    <button type="submit"
-                                        style="background:none; border:none; color:inherit; cursor:pointer; font:inherit; padding: 0.8rem 1.2rem; text-align: left; width: 100%; display: flex; align-items: center; gap: 0.5rem;"><i
-                                            class="bi bi-box-arrow-right"></i> Logout</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                @else
-                    <li><a href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
-                    <li><a href="{{ route('register') }}"><i class="bi bi-person-plus"></i> Register</a></li>
-                @endauth
-            </ul>
-        </nav>
-    </header>
-
-    <div class="section active" id="section-penjelasan" style="margin: top 20px;">
-        <h2>Dukung Program Donasi kami</h2>
-        <p style="text-align: center">Pilih program yang ingin kamu bantu:</p>
-        <div class="donasi-grid">
-            <div class="donasi-item">
-                <img src="satwa.jpeg" alt="satwa" />
-                <div class="donasi-item-content">
-                    <h3>🐒 Satwa Endemik - Rp 150.000</h3>
-                    <p>Bantu pelestarian satwa yang hampir punah.</p>
-                    <button onclick="pilihProgram('satwa', 150000)">Donasi</button>
-                </div>
-            </div>
-            <div class="donasi-item">
-                <img src="th.jpeg" alt="terumbu karang" />
-                <div class="donasi-item-content">
-                    <h3>🌊 Terumbu Karang - Rp 200.000</h3>
-                    <p>Bantu pelestarian ekosistem laut Indonesia.</p>
-                    <button onclick="pilihProgram('karang', 200000)">Donasi</button>
-                </div>
-            </div>
-            <div class="donasi-item">
-                <img src="bakau.jpeg" alt="bakau" />
-                <div class="donasi-item-content">
-                    <h3>🌳 Pohon Bakau - Rp 300.000</h3>
-                    <p>Tanam dan rawat pohon bakau untuk hutan pesisir.</p>
-                    <button onclick="pilihProgram('bakau', 300000)">Donasi</button>
-                </div>
-            </div>
-        </div>
+    <!-- Loading Animation Overlay -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
     </div>
 
-    <div class="section" id="section-formulir">
-        <h2>Formulir Donatur</h2>
+    <!-- Parallax Background -->
+    <div class="parallax-wrapper"></div>
 
-        @if (session('error'))
-            <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                {{ session('error') }}
-            </div>
-        @endif
+    <!-- Main Content Wrapper -->
+    <div class="content-wrapper">
+        <!-- Decorative Glows -->
+        <div class="glow-blob" style="top: 10%; left: -10%;"></div>
+        <div class="glow-blob" style="bottom: 20%; right: -10%; width: 600px; height: 600px;"></div>
 
-        @if ($errors->any())
-            <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
+        <!-- Header -->
+        <div class="section active visible" style="text-align: center; margin-bottom: 40px;">
+            <h1
+                style="font-size: 3.5rem; font-weight: 800; color: #fff; margin-bottom: 10px; text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);">
+                <i class="bi bi-tree-fill" style="color: #6ee7b7;"></i> Berbagi Untuk Alam
+            </h1>
+            <p style="font-size: 1.2rem; color: #d1fae5; max-width: 800px; margin: 0 auto;">
+                Setiap rupiah yang Anda donasikan adalah langkah nyata untuk melestarikan keanekaragaman hayati dan masa
+                depan bumi kita.
+            </p>
+        </div>
+
+        <div class="section active visible" id="section-penjelasan">
+            <h2>Dukung Program Donasi Kami</h2>
+            <p style="text-align: center; color: #a7f3d0; margin-bottom: 30px;">Pilih program yang ingin kamu bantu:</p>
+
+            <div class="donasi-grid">
+                <!-- Skeleton Loader (Tampil saat memuat) -->
+                <div id="skeleton-container" style="display: contents;">
+                    @for ($i = 0; $i < 3; $i++)
+                        <div class="skeleton-card"
+                            style="background: rgba(255,255,255,0.1); border-radius: 24px; overflow: hidden;">
+                            <div class="skeleton" style="width: 100%; height: 220px;"></div>
+                            <div style="padding: 25px; flex-grow: 1;">
+                                <div class="skeleton" style="width: 70%; height: 24px; margin-bottom: 15px;"></div>
+                                <div class="skeleton" style="width: 100%; height: 16px; margin-bottom: 8px;"></div>
+                                <div class="skeleton" style="width: 90%; height: 16px; margin-bottom: 8px;"></div>
+                                <div class="skeleton" style="width: 60%; height: 16px; margin-bottom: 20px;"></div>
+                                <div class="skeleton" style="width: 100%; height: 45px; border-radius: 50px;"></div>
+                            </div>
+                        </div>
+                    @endfor
+                </div>
+
+                <div id="real-campaigns" style="display: contents; display: none;">
+                    @foreach ($campaigns as $campaign)
+                        <div class="donasi-item fade-in">
+                            <img src="{{ $campaign->gambar ? asset('storage/' . $campaign->gambar) : asset('img/default.jpg') }}"
+                                alt="{{ $campaign->judul }}" />
+
+                            <div class="donasi-item-content">
+                                <h3>{{ $campaign->judul }}</h3>
+                                <p>{{ Str::limit($campaign->deskripsi, 100) }}</p>
+
+                                <!-- Donasi Button -->
+                                <button onclick="pilihProgram({{ $campaign->id_campaign }}, {{ $campaign->nominal }})">
+                                    Donasi
+                                </button>
+
+                                <!-- Detail Button -->
+                                <button class="donasi-item button btn-detail"
+                                    onclick="lihatDetail({{ $campaign->id_campaign }})">
+                                    Lihat Detail
+                                </button>
+                            </div>
+                        </div>
                     @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form action="{{ route('donasi.submit') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <label>Nama</label>
-            <input type="text" value="{{ Auth::check() ? Auth::user()->nama : 'Guest / Donatur Tamu' }}" readonly
-                style="background-color: #e0e0e0; cursor: not-allowed;" />
-
-            <label>Email</label>
-            <input type="email" value="{{ Auth::check() ? Auth::user()->email : 'guest@mua.com' }}" readonly
-                style="background-color: #e0e0e0; cursor: not-allowed;" />
-
-            <label>Nominal (Rp)</label>
-            <input type="number" name="nominal" id="nominal" required min="10000" />
-
-            <input type="hidden" name="jenis" id="program" />
-
-            <label>Metode Pembayaran</label>
-            <div class="payment-methods-grid">
-                <label class="payment-card-label">
-                    <input type="radio" name="payment_method" value="bca" checked
-                        onchange="updatePaymentInfo()">
-                    <div class="payment-card-box">
-                        <i class="bi bi-bank"></i>
-                        <span>Bank BCA</span>
-                    </div>
-                </label>
-
-                <label class="payment-card-label">
-                    <input type="radio" name="payment_method" value="qris" onchange="updatePaymentInfo()">
-                    <div class="payment-card-box">
-                        <i class="bi bi-qr-code-scan"></i>
-                        <span>QRIS</span>
-                    </div>
-                </label>
-
-                <label class="payment-card-label">
-                    <input type="radio" name="payment_method" value="ewallet" onchange="updatePaymentInfo()">
-                    <div class="payment-card-box">
-                        <i class="bi bi-wallet2"></i>
-                        <span>E-Wallet</span>
-                    </div>
-                </label>
-            </div>
-
-            <label>Bukti Transfer (Opsional)</label>
-            <label class="custom-file-upload">
-                <input type="file" name="bukti_transfer" accept="image/*" style="display: none;"
-                    onchange="document.getElementById('file-name').innerText = this.files[0].name">
-                <i class="bi bi-cloud-upload"
-                    style="font-size: 1.5rem; display: block; margin-bottom: 5px; color: #2d6a4f;"></i>
-                <span id="file-name">Klik untuk unggah bukti transfer</span>
-            </label>
-
-            <div class="payment-methods">
-            </div>
-
-            <button type="submit" class="btn-submit"
-                style="margin-top: 40px; background-color: #2d6a4f; color: white; font-weight: bold;">Simpan & Lanjut
-                Pembayaran</button>
-            <button type="button" onclick="showSection('section-penjelasan')">Kembali</button>
-        </form>
-    </div>
-
-    <div class="section" id="section-pembayaran">
-        <h2>Instruksi Pembayaran</h2>
-        <p>
-            <strong>Terima kasih, <span id="out-nama"></span>!</strong>
-        </p>
-        <p>
-            Donasi untuk <span id="out-program"></span> sebesar
-            <strong>Rp <span id="out-nominal"></span></strong>
-        </p>
-
-        <div id="payment-instruction-content"
-            style="background: #f9f9f9; padding: 15px; border-radius: 5px; margin: 15px 0;">
-            <!-- Isi instruksi akan berubah via JS -->
-        </div>
-
-        <button onclick="konfirmasiDonasi()">Konfirmasi</button>
-        <button type="button" onclick="showSection('section-formulir')">
-            Kembali
-        </button>
-    </div>
-
-    <!-- Riwayat Donasi Section -->
-    @if (Auth::check())
-        <div class="section active" style="margin-top: 30px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h2 style="margin: 0; font-size: 1.2rem;">Riwayat Donasi</h2>
-                <select id="statusFilter" class="filter-select" onchange="filterHistory()">
-                    <option value="all">Semua Status</option>
-                    <option value="berhasil">Berhasil</option>
-                    <option value="pending">Pending</option>
-                    <option value="gagal">Gagal</option>
-                </select>
-            </div>
-
-            <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
-                    <thead>
-                        <tr style="background: #2d6a4f; color: white;">
-                            <th style="padding: 10px;">Tanggal</th>
-                            <th style="padding: 10px;">Program</th>
-                            <th style="padding: 10px;">Nominal</th>
-                            <th style="padding: 10px;">Status</th>
-                            <th style="padding: 10px;">Catatan</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyTableBody">
-                        @forelse($riwayat as $d)
-                            <tr class="history-row" data-status="{{ strtolower($d->status) }}"
-                                style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 10px;">{{ \Carbon\Carbon::parse($d->tanggal)->format('d M Y') }}
-                                </td>
-                                <td style="padding: 10px; text-transform: capitalize;">{{ $d->jenis }}</td>
-                                <td style="padding: 10px;">Rp {{ number_format($d->nominal, 0, ',', '.') }}</td>
-                                <td style="padding: 10px;">
-                                    <span
-                                        style="padding: 5px 10px; border-radius: 15px; font-size: 12px; font-weight: bold; 
-                                background: {{ $d->status == 'berhasil' ? '#d1e7dd' : ($d->status == 'pending' ? '#fff3cd' : '#f8d7da') }};
-                                color: {{ $d->status == 'berhasil' ? '#0f5132' : ($d->status == 'pending' ? '#856404' : '#721c24') }};">
-                                        {{ ucfirst($d->status) }}
-                                    </span>
-                                    @if ($d->status == 'pending' && $d->snap_token)
-                                        <button type="button" onclick="pay('{{ $d->snap_token }}')"
-                                            style="margin-left: 8px; padding: 4px 10px; font-size: 11px; background-color: #e9c46a; border: none; border-radius: 15px; cursor: pointer; color: #264653; font-weight: bold;">
-                                            <i class="bi bi-credit-card"></i> Bayar
-                                        </button>
-                                    @endif
-                                </td>
-                                <td style="padding: 10px; font-size: 0.9em; color: #555;">{{ $d->catatan ?? '-' }}
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" style="padding: 20px; text-align: center;">Belum ada riwayat
-                                    donasi.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    @endif
-
-    <!-- Footer -->
-    <footer>
-        <!-- Footer -->
-        <footer>
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-col">
-                        <h4>
-                            <i class="bi bi-tree"></i>
-                            Menadah Untuk Alam
-                        </h4>
-                        <p>
-                            Organisasi nirlaba yang berfokus pada konservasi keanekaragaman
-                            hayati dan pemberdayaan masyarakat Indonesia.
-                        </p>
-                    </div>
-                    <div class="footer-col">
-                        <h4>
-                            <i class="bi bi-link-45deg"></i>
-                            Tautan Cepat
-                        </h4>
-                        <ul>
-                            <li>
-                                <i class="bi bi-chevron-right"></i>
-                                <a href="{{ route('about') }}">Tentang Kami</a>
-                            </li>
-                            <li>
-                                <i class="bi bi-chevron-right"></i>
-                                <a href="{{ route('visimisi') }}">Visi Misi</a>
-                            </li>
-                            <li>
-                                <i class="bi bi-chevron-right"></i>
-                                <a href="{{ route('kegiatan') }}">Kegiatan</a>
-                            </li>
-                            <li>
-                                <i class="bi bi-chevron-right"></i>
-                                <a href="{{ route('fun-fact') }}">Fun Fact</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="footer-col">
-                        <h4>
-                            <i class="bi bi-telephone"></i>
-                            Kontak Kami
-                        </h4>
-                        <ul>
-                            <li>
-                                <i class="bi bi-envelope"></i>
-                                novandidirobi@students.amikom.ac.id
-                            </li>
-                            <li>
-                                <i class="bi bi-phone"></i>
-                                +62 123 4567 890
-                            </li>
-                            <li>
-                                <i class="bi bi-geo-alt"></i>
-                                Daerah Istimewa Yogyakarta, Indonesia
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="copyright">
-                    <p>&copy; 2024 MUA. Hak Cipta Dilindungi.</p>
                 </div>
             </div>
-        </footer>
 
-        <script>
-            // --- Navbar Functionality (Added) ---
-            const menuToggle = document.getElementById("menuToggle");
-            const navLinks = document.getElementById("navLinks");
+            <!-- Top Donatur Section -->
+            @if ($topDonatur->count() > 0)
+                <div class="leaderboard-container">
+                    <h3 class="leaderboard-title"><i class="bi bi-trophy-fill" style="color: #FFD700;"></i> Pahlawan
+                        Alam
+                        Teratas</h3>
+                    <div class="leaderboard-list">
+                        @foreach ($topDonatur as $index => $donatur)
+                            <div class="leaderboard-item">
+                                <div class="rank-badge rank-{{ $index + 1 }}">{{ $index + 1 }}</div>
+                                <div style="margin-right: 15px;">
+                                    <i class="bi bi-person-circle" style="font-size: 2rem; color: #aaa;"></i>
+                                </div>
+                                <div class="donor-info">
+                                    <p class="donor-name">{{ $donatur->user->nama }}</p>
+                                    <p class="donor-amount">Total Donasi: <strong>Rp
+                                            {{ number_format($donatur->total_donasi, 0, ',', '.') }}</strong></p>
+                                </div>
+                                <i class="bi bi-award"
+                                    style="font-size: 1.5rem; color: var(--primary-green); opacity: 0.8;"></i>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+        </div>
 
-            if (menuToggle && navLinks) {
-                menuToggle.addEventListener("click", () => {
-                    menuToggle.classList.toggle("active");
-                    navLinks.classList.toggle("active");
-                });
+        <!-- Detail Campaign Section (New) -->
+        <div class="section" id="section-detail">
+            <button onclick="showSection('section-penjelasan')"
+                style="width: auto; margin-bottom: 20px; background: transparent; color: #d1fae5; border: 1px solid rgba(255,255,255,0.3); border-radius: 50px; padding: 8px 20px;">
+                <i class="bi bi-arrow-left"></i> Kembali
+            </button>
+
+            <div class="detail-header">
+                <img id="detail-img" src="" alt="Campaign Image">
+            </div>
+
+            <div class="detail-content">
+                <h2 id="detail-title" style="text-align: left; font-size: 2rem; color: #fff;">Judul Campaign</h2>
+
+                <!-- Progress Bar -->
+                <div class="progress-text">
+                    <span id="detail-terkumpul">Terkumpul: Rp 0</span>
+                    <span id="detail-target">Target: Rp 0</span>
+                </div>
+                <div class="progress-container">
+                    <div id="detail-progress-bar" class="progress-bar" style="width: 0%"></div>
+                </div>
+
+                <p id="detail-desc" style="margin-top: 20px; line-height: 1.8; color: #d1d5db;">Deskripsi lengkap...</p>
+
+                <div style="margin-top: 30px;">
+                    <!-- Donasi Button (Reused Logic) -->
+                    <button id="detail-btn-donasi" class="btn-glow">
+                        Donasi Sekarang
+                    </button>
+                </div>
+
+                <!-- Social Share Section -->
+                <div class="share-container">
+                    <span class="share-label"><i class="bi bi-share-fill"></i> Bagikan Kebaikan Ini:</span>
+                    <div class="share-buttons">
+                        <a href="#" id="share-wa" target="_blank" class="btn-share share-wa">
+                            <i class="bi bi-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="#" id="share-fb" target="_blank" class="btn-share share-fb">
+                            <i class="bi bi-facebook"></i> Facebook
+                        </a>
+                        <a href="#" id="share-x" target="_blank" class="btn-share share-x">
+                            <i class="bi bi-twitter-x"></i> Twitter
+                        </a>
+                    </div>
+                </div>
+
+                <div class="recent-donors-list">
+                    <h4 style="color: #fff;"><i class="bi bi-clock-history"></i> Donatur Terbaru</h4>
+                    <div id="detail-donors"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-formulir"
+            style="background: rgba(255,255,255,0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); padding: 40px; max-width: 800px;">
+            <h2 style="text-align: center; margin-bottom: 10px; font-size: 2rem; color: #fff;">Formulir Donatur</h2>
+            <p style="text-align: center; color: #a7f3d0; margin-bottom: 40px;">Lengkapi data di bawah ini untuk
+                melanjutkan
+                kebaikan Anda.</p>
+
+            @if (session('error'))
+                <div
+                    style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    {{ session('error') }}
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div
+                    style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form id="form-donasi" action="{{ route('donasi.submit') }}" method="POST"
+                enctype="multipart/form-data">
+                @csrf
+                <!-- Hidden Inputs -->
+                <input type="hidden" name="id_campaign" id="id_campaign">
+                <input type="hidden" name="id_user" value="{{ Auth::check() ? Auth::user()->id : null }}">
+                <input type="hidden" name="jenis" id="program">
+
+                <!-- Donor Info -->
+                <div class="form-group">
+                    <label class="form-label">Nama Donatur</label>
+                    <input type="text" class="form-control"
+                        value="{{ Auth::check() ? Auth::user()->nama : 'Guest / Donatur Tamu' }}" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control"
+                        value="{{ Auth::check() ? Auth::user()->email : 'guest@mua.com' }}" readonly />
+                </div>
+
+                <!-- Nominal -->
+                <div class="form-group">
+                    <label class="form-label">Pilih Nominal Donasi</label>
+                    <div class="nominal-presets">
+                        <div class="preset-btn" onclick="setNominal(50000, this)">Rp 50rb</div>
+                        <div class="preset-btn" onclick="setNominal(100000, this)">Rp 100rb</div>
+                        <div class="preset-btn" onclick="setNominal(200000, this)">Rp 200rb</div>
+                        <div class="preset-btn" onclick="setNominal(500000, this)">Rp 500rb</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nominal Lainnya (Rp)</label>
+                    <input type="number" name="nominal" id="nominal" class="form-control"
+                        placeholder="Contoh: 50000" required min="10000"
+                        style="font-weight: bold; color: #059669;" />
+                </div>
+
+                <!-- Payment Method -->
+                <div class="form-group">
+                    <label class="form-label">Metode Pembayaran</label>
+                    <div class="payment-methods-grid">
+                        <label class="payment-card-label">
+                            <input type="radio" name="payment_method" value="bca" checked
+                                onchange="updatePaymentInfo()">
+                            <div class="payment-card-box">
+                                <i class="bi bi-bank"></i>
+                                <span>Bank BCA</span>
+                            </div>
+                        </label>
+
+                        <label class="payment-card-label">
+                            <input type="radio" name="payment_method" value="qris"
+                                onchange="updatePaymentInfo()">
+                            <div class="payment-card-box">
+                                <i class="bi bi-qr-code-scan"></i>
+                                <span>QRIS</span>
+                            </div>
+                        </label>
+
+                        <label class="payment-card-label">
+                            <input type="radio" name="payment_method" value="ewallet"
+                                onchange="updatePaymentInfo()">
+                            <div class="payment-card-box">
+                                <i class="bi bi-wallet2"></i>
+                                <span>E-Wallet</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Optional Bukti Transfer -->
+                <div class="form-group">
+                    <label class="form-label">Bukti Transfer (Opsional)</label>
+                    <label class="custom-file-upload">
+                        <input type="file" name="bukti_transfer" accept="image/*" style="display: none;"
+                            onchange="document.getElementById('file-name').innerText = this.files[0].name">
+                        <i class="bi bi-cloud-upload"
+                            style="font-size: 1.5rem; display: block; margin-bottom: 5px; color: var(--primary-green);"></i>
+                        <span id="file-name">Klik untuk unggah bukti transfer</span>
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary-action" onclick="showSection('section-penjelasan')">
+                        <i class="bi bi-arrow-left"></i> Kembali
+                    </button>
+                    <button type="submit" class="btn-primary-action">
+                        Simpan & Lanjut Pembayaran <i class="bi bi-arrow-right-circle"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="section" id="section-pembayaran"
+            style="background: rgba(255,255,255,0.05); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.2);">
+            <h2>Instruksi Pembayaran</h2>
+            <p style="color: #d1d5db;">
+                <strong>Terima kasih, <span id="out-nama"></span>!</strong>
+            </p>
+            <p style="color: #d1d5db;">
+                Donasi untuk <span id="out-program"></span> sebesar
+                <strong>Rp <span id="out-nominal"></span></strong>
+            </p>
+
+            <div id="payment-instruction-content"
+                style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin: 15px 0; color: #fff;">
+                <!-- Isi instruksi akan berubah via JS -->
+            </div>
+
+            <button onclick="konfirmasiDonasi()">Konfirmasi</button>
+            <button type="button" onclick="showSection('section-formulir')">
+                Kembali
+            </button>
+        </div>
+    </div> <!-- End Content Wrapper -->
+
+
+    @include('partials.footer')
+
+    <script>
+        // Data Campaign dari Controller (untuk Detail View)
+        const campaignsData = @json($campaigns);
+
+        // --- Counter Animation Function ---
+        function animateValue(obj, start, end, duration, prefix = "") {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+
+                // Easing function (easeOutExpo) for smooth effect
+                const easeOut = 1 - Math.pow(2, -10 * progress);
+
+                const currentVal = Math.floor(easeOut * (end - start) + start);
+
+                // Format Rupiah
+                obj.innerHTML = prefix + new Intl.NumberFormat('id-ID').format(currentVal);
+
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    obj.innerHTML = prefix + new Intl.NumberFormat('id-ID').format(end);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // --- Preset Nominal Function ---
+        function setNominal(amount, element) {
+            document.getElementById('nominal').value = amount;
+            document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            if (element) element.classList.add('active');
+        }
+
+        // --- Smooth Section Switching with Loading Animation ---
+        function showSection(id) {
+            const overlay = document.getElementById('loading-overlay');
+            const currentSection = document.querySelector('.section.active');
+            const nextSection = document.getElementById(id);
+
+            // 1. Show Loading
+            overlay.classList.add('active');
+
+            // 2. Fade out current section
+            if (currentSection) {
+                currentSection.classList.remove('visible');
             }
 
-            const dropdowns = document.querySelectorAll(".dropdown");
-            dropdowns.forEach((dropdown) => {
-                const toggle = dropdown.querySelector(".dropdown-toggle");
-                if (toggle) {
-                    toggle.addEventListener("click", function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        dropdown.classList.toggle("active");
-                        dropdowns.forEach((other) => {
-                            if (other !== dropdown) other.classList.remove("active");
-                        });
+            // 3. Wait for transition, then switch
+            setTimeout(() => {
+                document.querySelectorAll(".section").forEach((s) => {
+                    s.classList.remove("active");
+                });
+
+                nextSection.classList.add("active");
+
+                // Scroll to top of section
+                nextSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+
+                // 4. Fade in new section & Hide Loading
+                setTimeout(() => {
+                    nextSection.classList.add('visible');
+                    overlay.classList.remove('active');
+                }, 300);
+            }, 500);
+        }
+
+        function pilihProgram(campaignId, nominal) {
+            document.getElementById("program").value = campaignId;
+            document.getElementById("nominal").value = nominal;
+            showSection("section-formulir");
+            updatePaymentInfo();
+        }
+
+        // --- Detail View Logic ---
+        function lihatDetail(id) {
+            const campaign = campaignsData.find(c => c.id_campaign == id);
+            if (!campaign) return;
+
+            // Populate Data
+            document.getElementById('detail-title').innerText = campaign.judul;
+            document.getElementById('detail-desc').innerText = campaign.deskripsi;
+            document.getElementById('detail-img').src = campaign.gambar ? "{{ asset('storage') }}/" + campaign.gambar :
+                "{{ asset('img/default.jpg') }}";
+
+            // Progress Bar
+            const percent = campaign.percent || 0;
+            document.getElementById('detail-progress-bar').style.width = percent + '%';
+
+            // Jalankan Animasi Counter pada "Terkumpul"
+            const elTerkumpul = document.getElementById('detail-terkumpul');
+            animateValue(elTerkumpul, 0, campaign.terkumpul, 2000, "Terkumpul: Rp ");
+
+            document.getElementById('detail-target').innerText = 'Target: Rp ' + new Intl.NumberFormat('id-ID').format(
+                campaign.target);
+
+            // Set Donasi Button Action
+            const btnDonasi = document.getElementById('detail-btn-donasi');
+            btnDonasi.onclick = function() {
+                pilihProgram(campaign.id_campaign, campaign.nominal || 0);
+            };
+
+            // --- Update Share Links ---
+            const currentUrl = window.location.href; // Atau URL spesifik campaign jika ada route detail
+            const shareText = `Ayo bantu program "${campaign.judul}" di Menadah Untuk Alam! Donasi sekarang:`;
+
+            document.getElementById('share-wa').href =
+                `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + currentUrl)}`;
+            document.getElementById('share-fb').href =
+                `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+            document.getElementById('share-x').href =
+                `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(currentUrl)}`;
+
+
+            // Recent Donors List
+            const donorsList = document.getElementById('detail-donors');
+            donorsList.innerHTML = '';
+            if (campaign.recent_donors && campaign.recent_donors.length > 0) {
+                campaign.recent_donors.forEach(d => {
+                    const div = document.createElement('div');
+                    div.className = 'recent-donor-item';
+                    div.innerHTML =
+                        `<span><i class="bi bi-person-fill"></i> ${d.user ? d.user.nama : 'Hamba Allah'}</span> <span style="color:#10b981; font-weight:bold;">Rp ${new Intl.NumberFormat('id-ID').format(d.nominal)}</span>`;
+                    donorsList.appendChild(div);
+                });
+            } else {
+                donorsList.innerHTML = '<p style="color:#888; font-style:italic;">Belum ada donatur terbaru.</p>';
+            }
+
+            showSection('section-detail');
+        }
+
+        function updatePaymentInfo() {
+            const method = document.querySelector('input[name="payment_method"]:checked').value;
+            const content = document.getElementById('payment-instruction-content');
+
+            let html = '';
+            if (method === 'bca') {
+                html =
+                    '<p>Silakan transfer ke <strong>Bank BCA</strong>:</p><h3>1234-5678-90</h3><p>a.n Yayasan Menadah Untuk Alam</p><p>Sertakan berita transfer: <em>Donasi MUA</em></p>';
+            } else if (method === 'qris') {
+                html =
+                    '<p>Scan QRIS berikut menggunakan Gopay, OVO, Dana, atau Mobile Banking:</p><div style="text-align:center; margin: 10px;"><img src="barcode.jpeg" alt="QRIS Code" style="max-width: 200px; border: 1px solid #ddd;"></div>';
+            } else if (method === 'ewallet') {
+                html =
+                    '<p>Kirim saldo ke nomor E-Wallet (Dana/OVO/Gopay):</p><h3>0812-3456-7890</h3><p>a.n Didi Novan Robi</p>';
+            }
+            content.innerHTML = html;
+        }
+
+        function konfirmasiDonasi() {
+            alert("Terima kasih! Silakan cek email Anda atau halaman riwayat untuk status donasi.");
+            window.location.href = "{{ route('donasi') }}";
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
                     });
                 }
             });
+        });
 
-            document.addEventListener("click", function(e) {
-                if (!e.target.closest(".dropdown")) {
-                    dropdowns.forEach((d) => d.classList.remove("active"));
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Handle Skeleton & Real Content Switch
+        window.addEventListener('load', function() {
+            const skeletons = document.getElementById('skeleton-container');
+            const real = document.getElementById('real-campaigns');
+
+            // Simulasi loading sebentar agar skeleton terlihat (smooth transition)
+            setTimeout(() => {
+                if (skeletons) skeletons.style.display = 'none';
+                if (real) real.style.display = 'contents';
+            }, 1000);
+        });
+
+        // --- 2. Card Tilt & Parallax Effect ---
+        const cards = document.querySelectorAll('.donasi-item');
+        cards.forEach(card => {
+            const img = card.querySelector('img');
+
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                // Hitung rotasi (Max 5 derajat - lebih kalem)
+                const rotateX = ((y - centerY) / centerY) * -5;
+                const rotateY = ((x - centerX) / centerX) * 5;
+
+                // Terapkan Transformasi ke Card
+                card.style.transform =
+                    `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+
+                // Efek Parallax pada Gambar (Gerak berlawanan arah)
+                if (img) {
+                    const moveX = ((x - centerX) / centerX) * -15;
+                    const moveY = ((y - centerY) / centerY) * -15;
+                    img.style.transform = `scale(1.1) translateX(${moveX}px) translateY(${moveY}px)`;
                 }
             });
 
-            if (navLinks) {
-                navLinks.addEventListener("click", (e) => {
-                    if (e.target.tagName === "A" && !e.target.classList.contains("dropdown-toggle")) {
-                        if (menuToggle) menuToggle.classList.remove("active");
-                        navLinks.classList.remove("active");
-                        dropdowns.forEach((d) => d.classList.remove("active"));
-                    }
-                });
-            }
-            // --- End Navbar Functionality ---
-
-            function filterHistory() {
-                const filter = document.getElementById('statusFilter').value;
-                const rows = document.querySelectorAll('.history-row');
-
-                rows.forEach(row => {
-                    if (filter === 'all' || row.getAttribute('data-status') === filter) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            }
-
-            function showSection(id) {
-                document
-                    .querySelectorAll(".section")
-                    .forEach((s) => s.classList.remove("active"));
-                document.getElementById(id).classList.add("active");
-            }
-
-            function pilihProgram(program, nominal) {
-                document.getElementById("program").value = program;
-                document.getElementById("nominal").value = nominal;
-                showSection("section-formulir");
-                updatePaymentInfo();
-            }
-
-            function updatePaymentInfo() {
-                const method = document.querySelector('input[name="payment_method"]:checked').value;
-                const content = document.getElementById('payment-instruction-content');
-
-                let html = '';
-                if (method === 'bca') {
-                    html =
-                        '<p>Silakan transfer ke <strong>Bank BCA</strong>:</p><h3>1234-5678-90</h3><p>a.n Yayasan Menadah Untuk Alam</p><p>Sertakan berita transfer: <em>Donasi MUA</em></p>';
-                } else if (method === 'qris') {
-                    html =
-                        '<p>Scan QRIS berikut menggunakan Gopay, OVO, Dana, atau Mobile Banking:</p><div style="text-align:center; margin: 10px;"><img src="barcode.jpeg" alt="QRIS Code" style="max-width: 200px; border: 1px solid #ddd;"></div>';
-                } else if (method === 'ewallet') {
-                    html =
-                        '<p>Kirim saldo ke nomor E-Wallet (Dana/OVO/Gopay):</p><h3>0812-3456-7890</h3><p>a.n Didi Novan Robi</p>';
-                }
-                content.innerHTML = html;
-            }
-
-            function konfirmasiDonasi() {
-                alert("Terima kasih! Silakan cek email Anda atau halaman riwayat untuk status donasi.");
-                window.location.href = "{{ route('donasi') }}";
-            }
-
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1) translateY(0)';
+                if (img) img.style.transform = 'scale(1)';
             });
 
-            // Fade in animation on scroll
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
+            // Smooth transition handling
+            card.addEventListener('mouseenter', () => {
+                // Keep box-shadow smooth, but make transform instant for responsiveness
+                card.style.transition =
+                    'box-shadow 0.4s ease, background 0.4s ease, border-color 0.4s ease, transform 0.1s linear';
+                if (img) img.style.transition = 'transform 0.1s linear';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                // Restore smooth transition for reset
+                card.style.transition =
+                    'box-shadow 0.4s ease, background 0.4s ease, border-color 0.4s ease, transform 0.5s ease';
+                if (img) img.style.transition = 'transform 0.5s ease';
+            });
+        });
+
+        // --- Validasi Client-Side (Cegah 0 Rupiah) ---
+        document.getElementById('form-donasi').addEventListener('submit', function(e) {
+            const nominal = document.getElementById('nominal').value;
+            // Validasi minimal 10.000 (sesuai min attribute) atau > 0
+            if (!nominal || nominal < 10000) {
+                e.preventDefault();
+                alert("Mohon maaf, minimal donasi adalah Rp 10.000 agar transaksi dapat diproses.");
+                return false;
+            }
+        });
+
+        // Trigger Snap Popup jika ada session snap_token
+        @if (session('snap_token'))
+            window.onload = function() {
+                pay('{{ session('snap_token') }}');
             };
+        @endif
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
+        // Trigger Success Modal & Confetti jika ada session show_success_modal
+        @if (session('show_success_modal'))
+            document.addEventListener('DOMContentLoaded', function() {
+                // 0. Mainkan Suara Efek (Tring!)
+                var audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+                audio.volume = 0.5;
+                audio.play().catch(function(error) {
+                    console.log("Audio play failed (browser policy): ", error);
                 });
-            }, observerOptions);
 
-            document.querySelectorAll('.fade-in').forEach(el => {
-                observer.observe(el);
-            });
-
-            // Trigger Snap Popup jika ada session snap_token
-            @if (session('snap_token'))
-                window.onload = function() {
-                    pay('{{ session('snap_token') }}');
+                // 1. Tampilkan Confetti (Kertas Warna-Warni)
+                var duration = 3 * 1000;
+                var animationEnd = Date.now() + duration;
+                var defaults = {
+                    startVelocity: 30,
+                    spread: 360,
+                    ticks: 60,
+                    zIndex: 10000
                 };
-            @endif
 
-            function pay(token) {
-                snap.pay(token, {
-                    onSuccess: function(result) {
-                        alert("Pembayaran Berhasil!");
-                        window.location.reload();
-                    },
-                    onPending: function(result) {
-                        alert("Menunggu Pembayaran!");
-                        window.location.reload();
-                    },
-                    onError: function(result) {
-                        alert("Pembayaran Gagal!");
-                        window.location.reload();
-                    },
-                    onClose: function() {
-                        // User menutup popup
+                function randomInRange(min, max) {
+                    return Math.random() * (max - min) + min;
+                }
+
+                var interval = setInterval(function() {
+                    var timeLeft = animationEnd - Date.now();
+
+                    if (timeLeft <= 0) {
+                        return clearInterval(interval);
+                    }
+
+                    var particleCount = 50 * (timeLeft / duration);
+                    confetti(Object.assign({}, defaults, {
+                        particleCount,
+                        origin: {
+                            x: randomInRange(0.1, 0.3),
+                            y: Math.random() - 0.2
+                        }
+                    }));
+                    confetti(Object.assign({}, defaults, {
+                        particleCount,
+                        origin: {
+                            x: randomInRange(0.7, 0.9),
+                            y: Math.random() - 0.2
+                        }
+                    }));
+                }, 250);
+
+                // 2. Tampilkan SweetAlert Popup
+                Swal.fire({
+                    title: '<span style="color: #065f46; font-weight: 800; font-size: 1.8rem;">Terima Kasih!</span>',
+                    html: `
+                        <div style="margin-bottom: 15px;">
+                            <img src="https://cdn-icons-png.flaticon.com/512/4148/4148517.png" style="width: 100px; animation: floatUp 2s infinite ease-in-out;">
+                        </div>
+                        <p style="font-size: 1.1rem; color: #4b5563; margin-bottom: 5px;">Kebaikan Anda telah kami terima.</p>
+                        <p style="font-size: 0.95rem; color: #6b7280;">ID Donasi: <b style="color: #10b981; font-family: monospace;">#{{ session('donasi_id') ?? 'BARU' }}</b></p>
+                        <div style="background: #f0fdf4; padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px dashed #10b981;">
+                            <p style="margin:0; font-size: 0.9rem; color: #064e3b; font-style: italic;">
+                                "Setiap rupiah adalah nafas baru bagi alam Indonesia." 🌿
+                            </p>
+                        </div>
+                    `,
+                    showCloseButton: true,
+                    focusConfirm: false,
+                    confirmButtonText: 'Sama-sama! 💚',
+                    confirmButtonColor: '#10b981',
+                    background: '#ffffff',
+                    backdrop: `rgba(0,0,0,0.6)`,
+                    customClass: {
+                        popup: 'rounded-4 shadow-lg',
+                        confirmButton: 'btn-glow' // Menggunakan style tombol yang sudah ada
                     }
                 });
-            }
-        </script>
+            });
+        @endif
+
+        function pay(token) {
+            snap.pay(token, {
+                onSuccess: function(result) {
+                    // Redirect ke route khusus yang akan memicu popup sukses
+                    // Kita kirim order_id agar bisa ditampilkan di popup
+                    window.location.href = "{{ route('donasi.sukses') }}?order_id=" + result.order_id;
+                },
+                onPending: function(result) {
+                    alert("Menunggu Pembayaran!");
+                    window.location.reload();
+                },
+                onError: function(result) {
+                    alert("Pembayaran Gagal!");
+                    window.location.reload();
+                },
+                onClose: function() {
+                    // User menutup popup
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

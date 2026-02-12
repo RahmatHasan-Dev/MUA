@@ -86,11 +86,11 @@
 }
 
 .partnerexclusive1 {
-    animation-delay: calc(20s / 2 * (2 - 1) * -1);
+    animation-delay: calc(1s / 2 * (2 - 1) * -1);
 }
 
 .partnerexclusive2 {
-    animation-delay: calc(20s / 2 * (2 - 2) * -1);
+    animation-delay: calc(1s / 2 * (2 - 2) * -1);
 }
 
 .partnerlicense {
@@ -99,7 +99,7 @@
     position: absolute;
     left: max(calc(200px * 3), 100%);
     animation-name: scrollLeft;
-    animation-duration: 20s;
+    animation-duration: 10s;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     text-align: center;
@@ -108,15 +108,15 @@
 }
 
 .partnerlicense1 {
-    animation-delay: calc(20s / 3 * (3 - 1) * -1);
+    animation-delay: calc(10s / 3 * (3 - 1) * -1);
 }
 
 .partnerlicense2 {
-    animation-delay: calc(20s / 3 * (3 - 2) * -1);
+    animation-delay: calc(10s / 3 * (3 - 2) * -1);
 }
 
 .partnerlicense3 {
-    animation-delay: calc(20s / 3 * (3 - 3) * -1);
+    animation-delay: calc(10s / 3 * (3 - 3) * -1);
 }
 
 .section2 {

@@ -95,56 +95,13 @@
         input:checked+.slider:before {
             transform: translateX(26px);
         }
-
-        .form-control {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .text-danger {
-            color: #dc3545;
-            font-size: 0.875em;
-        }
-
-        .alert-success {
-            background: #d1e7dd;
-            color: #0f5132;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-        }
     </style>
 </head>
 
 <body>
-    <header id="header">
-        <nav class="container">
-            <a href="{{ route('home') }}" class="logo"><i class="bi bi-tree"></i> Menadah Untuk Alam</a>
-            <ul class="nav-links">
-                <li><a href="{{ route('home') }}">Beranda</a></li>
-                <li><a href="{{ route('donasi') }}">Donasi</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle active"><i class="bi bi-person-circle"></i>
-                        {{ Auth::user()->nama }}</a>
-                    <ul class="dropdown-content">
-                        <li><a href="{{ route('profile.edit') }}">Edit Profil</a></li>
-                        <li><a href="{{ route('settings') }}">Pengaturan</a></li>
-                        <li>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <a href="#" onclick="this.closest('form').submit()">Logout</a>
-                            </form>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-    </header>
+
+    @include('partials.navbar')
+
 
     <div class="settings-container">
         <div class="settings-card">
@@ -166,44 +123,50 @@
                 <h2><i class="bi bi-shield-lock"></i> Keamanan & Privasi</h2>
             </div>
 
-            @if (session('status') == 'password-updated')
-                <div class="alert-success">Password berhasil diperbarui!</div>
-            @endif
+            <!-- Form Ubah Password -->
+            <div style="padding: 20px 0; border-bottom: 1px solid #eee;">
+                <form action="{{ route('settings.password.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
 
-            <form action="{{ route('settings.password.update') }}" method="POST">
-                @csrf
-                @method('PUT')
+                    @if (session('success'))
+                        <div
+                            style="background-color: #d1e7dd; color: #0f5132; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                            {{ session('success') }}
+                        </div>
+                    @endif
 
-                <div class="setting-item" style="display: block;">
-                    <label>Password Saat Ini</label>
-                    <input type="password" name="current_password" class="form-control">
-                    @error('current_password')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
-                </div>
+                    @if ($errors->any())
+                        <div
+                            style="background-color: #f8d7da; color: #842029; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                            <ul style="margin: 0; padding-left: 20px;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
-                <div class="setting-item" style="display: block;">
-                    <label>Password Baru</label>
-                    <input type="password" name="password" class="form-control">
-                    @error('password')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
-                </div>
+                    <div style="margin-bottom: 15px;"><label
+                            style="display:block; margin-bottom:5px; font-weight:600; color:#2d6a4f;">Password Saat
+                            Ini</label><input type="password" name="current_password"
+                            style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+                    <div style="margin-bottom: 15px;"><label
+                            style="display:block; margin-bottom:5px; font-weight:600; color:#2d6a4f;">Password
+                            Baru</label><input type="password" name="password"
+                            style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
+                    <div style="margin-bottom: 15px;"><label
+                            style="display:block; margin-bottom:5px; font-weight:600; color:#2d6a4f;">Konfirmasi
+                            Password Baru</label><input type="password" name="password_confirmation"
+                            style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;"></div>
 
-                <div class="setting-item" style="display: block;">
-                    <label>Konfirmasi Password Baru</label>
-                    <input type="password" name="password_confirmation" class="form-control">
-                </div>
-
-                <div class="setting-item">
-                    <span></span>
                     <button type="submit"
-                        style="padding: 8px 20px; cursor: pointer; background: #2d6a4f; color: white; border: none; border-radius: 4px;">Simpan
+                        style="padding: 10px 20px; background-color: #2d6a4f; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Simpan
                         Password</button>
-                </div>
-            </form>
+                </form>
+            </div>
 
-            <div class="setting-item" style="border-top: 1px solid #eee; margin-top: 20px;">
+            <div class="setting-item">
                 <span>Hapus Akun</span>
                 <button
                     style="padding: 5px 15px; cursor: pointer; background: #ff6b6b; color: white; border: none; border-radius: 4px;">Hapus</button>

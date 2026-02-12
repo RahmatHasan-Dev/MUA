@@ -1,449 +1,523 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUA - Konservasi Alam Indonesia</title>
-    <!-- Bootstrap Icons -->
+    <title>Kegiatan | MUA</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    <style>
+        :root {
+            --primary-green: #10b981;
+            --dark-green: #065f46;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            --text-light: #ecfdf5;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at center, #059669 0%, #064e3b 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* --- Parallax Background Wrapper --- */
+        .parallax-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            background-image: url('https://png.pngtree.com/background/20230425/original/pngtree-beautiful-green-forest-path-picture-image_2470041.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            filter: brightness(0.5) contrast(1.1);
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            padding-top: 120px;
+            padding-bottom: 80px;
+            background: linear-gradient(to bottom, transparent 0%, rgba(5, 150, 105, 0.8) 30%, #065f46 100%);
+        }
+
+        /* --- Typography --- */
+        .page-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-title h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #6ee7b7, #fff, #6ee7b7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .page-title p {
+            font-size: 1.1rem;
+            color: #a7f3d0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .activity-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--glass-shadow);
+            transition: box-shadow 0.4s ease, background 0.4s ease, border-color 0.4s ease;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .activity-card:hover {
+            border-color: rgba(16, 185, 129, 0.6);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Glossy Glare Effect */
+        .activity-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .activity-card:hover::before {
+            left: 150%;
+            transition: 0.7s;
+        }
+
+        .activity-image {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .activity-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .activity-card:hover .activity-image img {
+            transform: scale(1.1);
+        }
+
+        .activity-content {
+            padding: 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .activity-date {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary-green);
+            margin-bottom: 8px;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .activity-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0 0 10px;
+            line-height: 1.3;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .activity-description {
+            color: #d1d5db;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            flex-grow: 1;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .activity-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #a7f3d0;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        .activity-tags {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .activity-tag {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* --- Filter Buttons --- */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #a7f3d0;
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-green);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+            border-color: var(--primary-green);
+        }
+
+        /* Gallery Section */
+        .photo-gallery {
+            margin-top: 100px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 20px;
+        }
+
+        .gallery-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 50px;
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .photo-item {
+            border-radius: 24px;
+            overflow: hidden;
+            height: 350px;
+            position: relative;
+            box-shadow: var(--glass-shadow);
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.15);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+        }
+
+        .photo-item:hover .photo-overlay {
+            opacity: 1;
+        }
+
+        /* Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glow-blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .page-title h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <!-- Header/Navbar -->
-    <header id="header">
-        <nav class="container">
-            <a href="{{ route('home') }}" class="logo">
-                <i class="bi bi-tree"></i>
-                Menadah Untuk Alam
-            </a>
-            <div class="menu-toggle" id="menuToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="{{ route('home') }}">
-                        <i class="bi bi-house"></i>
-                        Beranda
-                    </a></li>
-                <li><a href="{{ route('kegiatan') }}">
-                        <i class="bi bi-clipboard-check"></i>
-                        Kegiatan
-                    </a></li>
-                <li class="dropdown">
-                    <a href="" class="dropdown-toggle">
-                        <i class="bi bi-info-circle"></i>
-                        Tentang
-                    </a>
-                    <ul class="dropdown-content">
-                        <li><a href="{{ route('about') }}">
-                                <i class="bi bi-people"></i>
-                                Tentang Kami
-                            </a></li>
-                        <li><a href="{{ route('visimisi') }}">
-                                <i class="bi bi-eye"></i>
-                                Visi & Misi
-                            </a></li>
-                        <li><a href="{{ route('kegiatan') }}">
-                                <i class="bi bi-calendar-event"></i>
-                                Kegiatan
-                            </a></li>
-                        <li><a href="{{ route('fun-fact') }}">
-                                <i class="bi bi-lightbulb"></i>
-                                Fun Fact
-                            </a></li>
-                    </ul>
-                </li>
-                <li><a href="{{ route('partnership') }}">
-                        <i class="bi bi-person-up"></i>
-                        Partnership
-                    </a></li>
-                <li><a href="{{ route('donasi') }}">
-                        <i class="bi bi-heart"></i>
-                        Donasi
-                    </a></li>
-            </ul>
-        </nav>
-    </header>
+    @include('partials.navbar')
 
-    <!-- Kegiatan Section -->
-    <section class="kegiatan">
+    <!-- Parallax Background -->
+    <div class="parallax-wrapper"></div>
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+
+        <!-- Decorative Glows -->
+        <div class="glow-blob" style="top: 0; left: -10%;"></div>
+        <div class="glow-blob" style="bottom: 10%; right: -10%;"></div>
+
+        <!-- Header -->
+        <div class="container page-title fade-up">
+            <p>Jejak Langkah Kami</p>
+            <h1>Kegiatan & Aksi</h1>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="container fade-up">
+            <div class="filter-container">
+                <button class="filter-btn active" data-filter="all">Semua</button>
+                <button class="filter-btn" data-filter="Konservasi">Konservasi</button>
+                <button class="filter-btn" data-filter="Edukasi">Edukasi</button>
+                <button class="filter-btn" data-filter="Sosial">Sosial</button>
+            </div>
+        </div>
+
+        <!-- Activity Grid -->
         <div class="container">
-            <h2 class="section-title fade-in" id="kegiatan">Kegiatan Kami</h2>
-
             <div class="activity-grid">
-                <div class="activity-card fade-in">
-                    <div class="activity-image">
-                        <img src="https://jatengprov.go.id/wp-content/uploads/2021/09/IMG-20210923-WA0053.jpg"
-                            alt="">
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-date">15 Mar 2024</div>
-                        <h3 class="activity-title">Penanaman Pohon Mangrove</h3>
-                        <p class="activity-description">Kegiatan penanaman 100 bibit mangrove di kawasan pesisir untuk
-                            menjaga ekosistem laut dan mencegah abrasi pantai.</p>
-                        <div class="activity-meta">
-                            <div class="activity-location">
-                                <span>Pantai Trisik</span>
-                            </div>
-                            <div class="activity-participants">
-                                <span>65 Peserta</span>
-                            </div>
+                @foreach ($kegiatan as $index => $item)
+                    <a href="{{ route('kegiatan.detail', $item->id_berita) }}" class="activity-card fade-up"
+                        style="transition-delay: {{ $index * 100 }}ms;">
+                        <div class="activity-image">
+                            <img src="{{ asset('storage/' . $item->gambar) }}" alt="{{ $item->judul }}">
                         </div>
-                        <div class="activity-tags">
-                            <span class="activity-tag">Konservasi</span>
-                            <span class="activity-tag">Mangrove</span>
-                            <span class="activity-tag">Komunitas</span>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="activity-card fade-in">
-                    <div class="activity-image">
-                        <img src="https://media.suara.com/pictures/653x366/2023/03/21/59690-ecoprint.jpg"
-                            alt="">
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-date">08 Mar 2025</div>
-                        <h3 class="activity-title">Workshop Eco-Printing</h3>
-                        <p class="activity-description">Pelatihan pembuatan kain ramah lingkungan menggunakan pewarna
-                            alami dari daun dan bunga untuk pemberdayaan masyarakat.</p>
-                        <div class="activity-meta">
-                            <div class="activity-location">
-                                <span>Yogyakarta</span>
+                        <div class="activity-content">
+                            <div class="activity-date">
+                                {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
                             </div>
-                            <div class="activity-participants">
-                                <span>25 Peserta</span>
-                            </div>
-                        </div>
-                        <div class="activity-tags">
-                            <span class="activity-tag">Workshop</span>
-                            <span class="activity-tag">Eco</span>
-                            <span class="activity-tag">Pemberdayaan</span>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="activity-card fade-in">
-                    <div class="activity-image">
-                        <img src="https://img.antarafoto.com/cache/1200x799/2022/08/17/sosialisasi-dan-edukasi-kesehatan-di-lingkungan-sekolah-11lc9-dom.webp"
-                            alt="">
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-date">22 Feb 2025</div>
-                        <h3 class="activity-title">Edukasi Lingkungan di Sekolah</h3>
-                        <p class="activity-description">Program edukasi tentang pentingnya menjaga lingkungan dan
-                            keanekaragaman hayati untuk siswa-siswi sekolah dasar.</p>
-                        <div class="activity-meta">
-                            <div class="activity-location">
-                                <span>SDN 1 Bantul</span>
-                            </div>
-                            <div class="activity-participants">
-                                <span>40 Siswa</span>
-                            </div>
-                        </div>
-                        <div class="activity-tags">
-                            <span class="activity-tag">Edukasi</span>
-                            <span class="activity-tag">Sekolah</span>
-                            <span class="activity-tag">Anak-anak</span>
-                        </div>
-                    </div>
-                </div>
+                            <h3 class="activity-title">{{ $item->judul }}</h3>
 
-                <div class="activity-card fade-in">
-                    <div class="activity-image">
-                        <img src="https://cilacapkab.go.id/v3/wp-content/uploads/2021/10/IMG_6038-scaled.jpg"
-                            alt="">
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-date">28 Des 2024</div>
-                        <h3 class="activity-title">Bersih Pantai Bersama</h3>
-                        <p class="activity-description">Aksi bersih pantai untuk mengurangi sampah plastik dan menjaga
-                            ekosistem laut bersama relawan dan masyarakat lokal.</p>
-                        <div class="activity-meta">
-                            <div class="activity-location">
-                                <span>Pantai Baru</span>
-                            </div>
-                            <div class="activity-participants">
-                                <span>50 Relawan</span>
-                            </div>
-                        </div>
-                        <div class="activity-tags">
-                            <span class="activity-tag">Bersih Pantai</span>
-                            <span class="activity-tag">Sampah</span>
-                            <span class="activity-tag">Relawan</span>
-                        </div>
-                    </div>
-                </div>
+                            <p class="activity-description">
+                                {{ Str::limit($item->deskripsi, 120) }}
+                            </p>
 
-                <div class="activity-card fade-in">
-                    <div class="activity-image">
-                        <img src="https://images-tm.tempo.co/all/2021/11/20/787806/787806_1200.jpg" alt="">
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-date">2 Jan 2025</div>
-                        <h3 class="activity-title">Monitoring Satwa Langka</h3>
-                        <p class="activity-description">Kegiatan penelitian dan monitoring populasi satwa langka di
-                            Taman Nasional untuk mendukung upaya konservasi.</p>
-                        <div class="activity-meta">
-                            <div class="activity-location">
-                                <span>TN Gunung Merapi</span>
+                            <div class="activity-meta">
+                                <div class="activity-location">
+                                    <i class="bi bi-geo-alt-fill"></i> {{ $item->lokasi }}
+                                </div>
+                                <div class="activity-participants">
+                                    <i class="bi bi-people-fill"></i> {{ $item->peserta }}
+                                </div>
                             </div>
-                            <div class="activity-participants">
-                                <span>15 Peneliti</span>
-                            </div>
-                        </div>
-                        <div class="activity-tags">
-                            <span class="activity-tag">Penelitian</span>
-                            <span class="activity-tag">Satwa</span>
-                            <span class="activity-tag">Monitoring</span>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="activity-card fade-in">
-                    <div class="activity-image">
-                        <img src="https://www.arutmin.com/uploads/2021/04/2936dc6fe8123dd4734277246e47efad_6cca4345ca3a499e6a72485732bdccda.jpeg"
-                            alt="">
-                    </div>
-                    <div class="activity-content">
-                        <div class="activity-date">5 April 2024</div>
-                        <h3 class="activity-title">Pelatihan Budidaya Organik</h3>
-                        <p class="activity-description">Workshop budidaya tanaman organik untuk petani lokal guna
-                            meningkatkan hasil panen yang ramah lingkungan.</p>
-                        <div class="activity-meta">
-                            <div class="activity-location">
-                                <span>Desa Bunder Kulon</span>
-                            </div>
-                            <div class="activity-participants">
-                                <span>20 Petani</span>
+                            <div class="activity-tags">
+                                @if ($item->tag1)
+                                    <span class="activity-tag">{{ $item->tag1 }}</span>
+                                @endif
+                                @if ($item->tag2)
+                                    <span class="activity-tag">{{ $item->tag2 }}</span>
+                                @endif
+                                @if ($item->tag3)
+                                    <span class="activity-tag">{{ $item->tag3 }}</span>
+                                @endif
                             </div>
                         </div>
-                        <div class="activity-tags">
-                            <span class="activity-tag">Pertanian</span>
-                            <span class="activity-tag">Organik</span>
-                            <span class="activity-tag">Pelatihan</span>
-                        </div>
-                    </div>
-                </div>
+                    </a>
+                @endforeach
             </div>
+        </div>
 
-            <!-- Photo Gallery -->
-            <div class="photo-gallery" id="doksli">
-                <h3 class="gallery-title fade-in">Galeri Foto Kegiatan</h3>
-                <div class="photo-grid">
-                    <div class="photo-item fade-in">
-                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiMMuzpkaDmwjyo6gLayLBdzUSI2l9wMNe2Ao2a6FseQdLJfHdzq8485BjNo9Slam6aRZ_h9P-I85ZasHKwLpeqGOVSUa0ZOjNnCFcULKBRdTVRfWIWGJqTUk75iHFolthmwvqK2CGtoR8k/s1280/WhatsApp+Image+2021-07-22+at+10.32.58.jpeg"
-                            alt="">
-                        <div class="photo-overlay">
-                        </div>
+        <!-- Photo Gallery -->
+        <div class="photo-gallery fade-up">
+            <h3 class="gallery-title">Galeri Foto</h3>
+            <div class="photo-grid">
+                <div class="photo-item">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiMMuzpkaDmwjyo6gLayLBdzUSI2l9wMNe2Ao2a6FseQdLJfHdzq8485BjNo9Slam6aRZ_h9P-I85ZasHKwLpeqGOVSUa0ZOjNnCFcULKBRdTVRfWIWGJqTUk75iHFolthmwvqK2CGtoR8k/s1280/WhatsApp+Image+2021-07-22+at+10.32.58.jpeg"
+                        alt="Galeri 1">
+                    <div class="photo-overlay">
+                        <span style="color: white; font-weight: 600;"><i class="bi bi-camera"></i> Dokumentasi
+                            Lapangan</span>
                     </div>
-                    <div class="photo-item fade-in">
-                        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhXUtO5Jz0GzG9n1qSj9_HGMnwJgGT2fsPcYimMDTV_ldiNSG1xOZGqEgGuuTuJp3pV-MKH8IJ1rg-gkBUdjupHdjd2UAizAwmQHSIO4IyWX1Z7qr_naYNtBoyxcjWLObFpzjNJpHGkgM4/s2048/1.+IMG_20210326_081835-min.jpg"
-                            alt="">
-                        <div class="photo-overlay">
-                        </div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhXUtO5Jz0GzG9n1qSj9_HGMnwJgGT2fsPcYimMDTV_ldiNSG1xOZGqEgGuuTuJp3pV-MKH8IJ1rg-gkBUdjupHdjd2UAizAwmQHSIO4IyWX1Z7qr_naYNtBoyxcjWLObFpzjNJpHGkgM4/s2048/1.+IMG_20210326_081835-min.jpg"
+                        alt="Galeri 2">
+                    <div class="photo-overlay">
+                        <span style="color: white; font-weight: 600;"><i class="bi bi-camera"></i> Aksi Nyata</span>
                     </div>
-                    <div class="photo-item fade-in">
-                        <img src="https://nagasepaha-buleleng.desa.id/assets/files/artikel/sedang_1543808684IMG-20181202-WA0009.jpg"
-                            alt="">
-                        <div class="photo-overlay">
-                        </div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://nagasepaha-buleleng.desa.id/assets/files/artikel/sedang_1543808684IMG-20181202-WA0009.jpg"
+                        alt="Galeri 3">
+                    <div class="photo-overlay">
+                        <span style="color: white; font-weight: 600;"><i class="bi bi-camera"></i> Gotong Royong</span>
                     </div>
-                    <div class="photo-item fade-in">
-                        <img src="https://dlh.lumajangkab.go.id/uploads/berita/WhatsApp_Image_2025-03-18_at_08_15_01.jpeg"
-                            alt="">
-                        <div class="photo-overlay">
-                        </div>
+                </div>
+                <div class="photo-item">
+                    <img src="https://dlh.lumajangkab.go.id/uploads/berita/WhatsApp_Image_2025-03-18_at_08_15_01.jpeg"
+                        alt="Galeri 4">
+                    <div class="photo-overlay">
+                        <span style="color: white; font-weight: 600;"><i class="bi bi-camera"></i> Edukasi</span>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-col">
-                    <h4>
-                        <i class="bi bi-tree"></i>
-                        Menadah Untuk Alam
-                    </h4>
-                    <p>
-                        Organisasi nirlaba yang berfokus pada konservasi keanekaragaman
-                        hayati dan pemberdayaan masyarakat Indonesia.
-                    </p>
-                </div>
-                <div class="footer-col">
-                    <h4>
-                        <i class="bi bi-link-45deg"></i>
-                        Tautan Cepat
-                    </h4>
-                    <ul>
-                        <li>
-                            <i class="bi bi-chevron-right"></i>
-                            <a href="{{ route('about') }}">Tentang Kami</a>
-                        </li>
-                        <li>
-                            <i class="bi bi-chevron-right"></i>
-                            <a href="{{ route('visimisi') }}">Visi Misi</a>
-                        </li>
-                        <li>
-                            <i class="bi bi-chevron-right"></i>
-                            <a href="{{ route('kegiatan') }}">Kegiatan</a>
-                        </li>
-                        <li>
-                            <i class="bi bi-chevron-right"></i>
-                            <a href="{{ route('fun-fact') }}">Fun Fact</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>
-                        <i class="bi bi-telephone"></i>
-                        Kontak Kami
-                    </h4>
-                    <ul>
-                        <li>
-                            <i class="bi bi-envelope"></i>
-                            novandidirobi@students.amikom.ac.id
-                        </li>
-                        <li>
-                            <i class="bi bi-phone"></i>
-                            +62 123 4567 890
-                        </li>
-                        <li>
-                            <i class="bi bi-geo-alt"></i>
-                            Daerah Istimewa Yogyakarta, Indonesia
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2024 MUA. Hak Cipta Dilindungi.</p>
-            </div>
-        </div>
-    </footer>
+    @include('partials.footer')
 
     <script>
-        // Header scroll effect
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            if (window.scrollY > 100) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        // Mobile menu toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        // Dropdown functionality
-        const dropdowns = document.querySelectorAll('.dropdown');
-
-        dropdowns.forEach(dropdown => {
-            const toggle = dropdown.querySelector('.dropdown-toggle');
-
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                // On mobile, toggle the dropdown
-                if (window.innerWidth <= 768) {
-                    dropdown.classList.toggle('active');
-
-                    // Close other dropdowns
-                    dropdowns.forEach(otherDropdown => {
-                        if (otherDropdown !== dropdown) {
-                            otherDropdown.classList.remove('active');
-                        }
-                    });
-                }
-            });
-        });
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.dropdown')) {
-                dropdowns.forEach(dropdown => {
-                    dropdown.classList.remove('active');
+        // Scroll Animation Script
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
                 });
-            }
+            }, {
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
         });
 
-        // Close mobile menu when clicking on a link
-        navLinks.addEventListener('click', (e) => {
-            if (e.target.tagName === 'A' && !e.target.classList.contains('dropdown-toggle')) {
-                menuToggle.classList.remove('active');
-                navLinks.classList.remove('active');
-                // Close all dropdowns
-                dropdowns.forEach(dropdown => {
-                    dropdown.classList.remove('active');
+        // Filter Script
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const activityCards = document.querySelectorAll('.activity-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                activityCards.forEach(card => {
+                    // Get text content of tags inside the card
+                    const tags = card.querySelector('.activity-tags').innerText;
+
+                    if (filterValue === 'all' || tags.includes(filterValue)) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
                 });
-            }
-        });
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
             });
         });
 
-        // Fade in animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // 3D Tilt Effect Script
+        const cards = document.querySelectorAll('.activity-card');
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
 
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
-        });
+                // Hitung rotasi (Max 10 derajat agar tidak terlalu ekstrim)
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
 
-        // Active navigation link
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.nav-links a');
-
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= sectionTop - 200) {
-                    current = section.getAttribute('id');
-                }
+                card.style.transform =
+                    `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
             });
 
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
-                }
+            card.addEventListener('mouseenter', () => {
+                card.style.transition =
+                    'box-shadow 0.4s ease, background 0.4s ease, border-color 0.4s ease, transform 0.1s linear';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transition =
+                    'box-shadow 0.4s ease, background 0.4s ease, border-color 0.4s ease, transform 0.5s ease';
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
             });
         });
     </script>

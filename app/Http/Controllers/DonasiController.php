@@ -3,72 +3,75 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Donasi;
 use Illuminate\Http\Request;
+use App\Models\Donasi;
 use Illuminate\Support\Facades\Validator;
 
 class DonasiController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     * Method GET
+     * Handle incoming donation history request.
+     * Endpoint: GET /api/donasi
      */
-    public function index()
+    public function index(Request $request)
     {
-        $donasi = Donasi::all();
+        // Ambil user yang sedang login (dari token)
+        $user = $request->user();
+
+        // Ambil data donasi milik user tersebut
+        $donasi = Donasi::where('id_user', $user->id)->orderBy('tanggal', 'desc')->get();
+
         return response()->json([
-            'status' => true,
-            'message' => 'Data donasi berhasil diambil',
-            'data' => $donasi
+            'status'  => true,
+            'message' => 'Riwayat donasi berhasil diambil',
+            'data'    => $donasi
         ], 200);
     }
 
     /**
-     * Store a newly created resource in storage.
-     * Method POST
+     * Handle incoming donation request.
+     * Endpoint: POST /api/donasi
      */
     public function store(Request $request)
     {
+        // 1. Validasi Data JSON yang masuk
         $validator = Validator::make($request->all(), [
-            'jenis' => 'required|string',
-            'nominal' => 'required|numeric|min:1',
             'id_user' => 'required|exists:pengguna,id', // Pastikan user ada di tabel pengguna
+            'jenis'   => 'required|string',
+            'nominal' => 'required|numeric|min:1000',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'status' => false,
-                'message' => 'Validasi error',
-                'errors' => $validator->errors()
+                'status'  => false,
+                'message' => 'Validasi gagal',
+                'errors'  => $validator->errors()
             ], 422);
         }
 
-        // Siapkan data
-        $data = $request->all();
-        
-        // Tambahkan tanggal otomatis jika tidak ada
-        if (!isset($data['tanggal'])) {
-            $data['tanggal'] = now();
+        try {
+            // 2. Simpan ke Database (Tabel Donasi)
+            $donasi = Donasi::create([
+                'id_user' => $request->id_user,
+                'jenis'   => $request->jenis,
+                'nominal' => $request->nominal,
+                'tanggal' => now(),       // Set tanggal hari ini
+                'status'  => 'pending',   // Default status pending
+                'catatan' => 'Donasi via API',
+            ]);
+
+            // 3. Berikan Respon Sukses (JSON)
+            return response()->json([
+                'status'  => true,
+                'message' => 'Donasi berhasil dibuat, silakan lakukan pembayaran.',
+                'data'    => $donasi
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Terjadi kesalahan server: ' . $e->getMessage()
+            ], 500);
         }
-
-        // Default status pending jika tidak ada
-        if (!isset($data['status'])) {
-            $data['status'] = 'pending';
-        }
-
-        $donasi = Donasi::create($data);
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Data donasi berhasil ditambahkan',
-            'data' => $donasi
-        ], 201);
-    }
-
-    public function show($id)
-    {
-        $donasi = Donasi::find($id);
-        if (!$donasi) return response()->json(['message' => 'Data tidak ditemukan'], 404);
-        return response()->json(['data' => $donasi], 200);
     }
 }

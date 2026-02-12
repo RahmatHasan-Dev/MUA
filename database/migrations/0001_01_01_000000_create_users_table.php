@@ -11,12 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        // Pastikan tabel lama terhapus dulu agar bersih
+        Schema::dropIfExists('pengguna'); // Hapus tabel pengguna jika ada
+        Schema::dropIfExists('users');    // Hapus tabel users bawaan jika ada
+
+        Schema::create('pengguna', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('nama');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('no_hp')->nullable();
+            $table->date('tgl_lahir')->nullable();
+            $table->string('role')->default('user'); // Kolom Role: 'admin' atau 'user'
             $table->rememberToken();
             $table->timestamps();
         });
@@ -42,7 +49,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('pengguna');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }

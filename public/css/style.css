@@ -76,28 +76,7 @@ nav {
   transform: scale(1.05);
 }
 
-.nav-links {
-  display: flex;
-  list-style: none;
-  gap: 2rem;
-  align-items: center;
-}
 
-.nav-links a {
-  color: var(--text-dark);
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 25px;
-  transition: var(--transition);
-  position: relative;
-}
-
-.nav-links a:hover,
-.nav-links a.active {
-  color: var(--primary-green);
-  background: var(--light-green);
-}
 .activity-grid {
   grid-template-columns: 1fr;
 }

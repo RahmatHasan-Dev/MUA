@@ -4,38 +4,48 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
-    /**
-     * Show the form for editing the user's profile.
-     */
-    public function edit(Request $request)
+    public function edit()
     {
-        return view('edit', [
-            'user' => $request->user(),
-        ]);
+        $user = Auth::user();
+        return view('profile.edit', compact('user'));
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function update(Request $request)
     {
-        $user = $request->user();
-
-        $validated = $request->validate([
-            'nama' => ['required', 'string', 'max:100'],
-            'no_hp' => ['nullable', 'string', 'max:20'],
-            'tgl_lahir' => ['nullable', 'date'],
-            'email' => ['required', 'string', 'email', 'max:100', Rule::unique('pengguna')->ignore($user->id)],
+        $user = Auth::user();
+        
+        // Validasi input
+        $request->validate([
+            'nama' => 'required|string|max:100',
+            'no_hp' => 'nullable|string|max:20',
+            'tgl_lahir' => 'nullable|date',
+            // Validasi gambar: harus gambar, maks 2MB
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
-        $user->fill($validated);
+        $data = $request->only(['nama', 'no_hp', 'tgl_lahir']);
 
-        $user->save();
+        // Proses Upload Foto
+        if ($request->hasFile('foto_profil')) {
+            // 1. Hapus foto lama jika ada (dan bukan default)
+            if ($user->foto_profil && Storage::disk('public')->exists($user->foto_profil)) {
+                Storage::disk('public')->delete($user->foto_profil);
+            }
+            
+            // 2. Simpan foto baru ke folder 'profil' di storage public
+            $path = $request->file('foto_profil')->store('profil', 'public');
+            $data['foto_profil'] = $path;
+        }
 
-        return redirect()->route('profile.edit')->with('status', 'profile-updated');
+        // Update data user di database
+        // Pastikan model User mapping ke tabel 'pengguna'
+        $user->update($data);
+
+        return back()->with('success', 'Profil berhasil diperbarui.');
     }
 }

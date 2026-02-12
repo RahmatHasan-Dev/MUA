@@ -2,661 +2,392 @@
 <html lang="id">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Visi & Misi Konservasi Alam</title>
-    <!-- Bootstrap Icons -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visi & Misi | MUA</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
     <style>
+        :root {
+            --primary-green: #10b981;
+            --dark-green: #064e3b;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+            --text-light: #ecfdf5;
+        }
+
         body {
+            font-family: 'Poppins', sans-serif;
             margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #eafaf1;
-            color: #2b3d2f;
+            padding: 0;
+            background: radial-gradient(circle at center, #059669 0%, #064e3b 100%);
+            color: #fff;
             overflow-x: hidden;
         }
 
-        :root {
-            --primary-green: #10b981;
-            --secondary-green: #059669;
-            --dark-green: #065f46;
-            --light-green: #d1fae5;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
-            --white: #ffffff;
-            --background: #f9fafb;
-            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
-            --border-radius: 12px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Header Styles */
-        header {
+        /* --- Parallax Background Wrapper --- */
+        .parallax-wrapper {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
-            z-index: 1000;
-            transition: var(--transition);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: var(--shadow);
+            height: 100vh;
+            z-index: -1;
+            background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop');
+            /* Misty Forest */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            /* Key for CSS Parallax */
+            filter: brightness(0.6) contrast(1.1);
         }
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            padding-top: 100px;
+            /* Space for Navbar */
+            padding-bottom: 80px;
+            background: linear-gradient(to bottom, transparent 0%, rgba(5, 150, 105, 0.8) 30%, #065f46 100%);
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-green);
-            text-decoration: none;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-            align-items: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        .nav-links a {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--primary-green);
-            background: var(--light-green);
-        }
-
-        /* Dropdown Styles */
-        .dropdown {
+        /* --- Typography & Titles --- */
+        .page-title {
+            text-align: center;
+            margin-bottom: 60px;
             position: relative;
         }
 
-        .dropdown-toggle {
-            cursor: pointer;
+        .page-title h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #6ee7b7, #fff, #6ee7b7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+            margin-bottom: 10px;
+            letter-spacing: -1px;
         }
 
-        .dropdown-content {
+        .page-title p {
+            font-size: 1.1rem;
+            color: #a7f3d0;
+            font-weight: 300;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* --- Glass Cards --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: var(--glass-shadow);
+            transition: box-shadow 0.4s ease, background 0.4s ease, border-color 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Glossy Glare Effect */
+        .glass-card::before {
+            content: '';
             position: absolute;
-            top: 100%;
-            left: 0;
-            background: var(--white);
-            min-width: 220px;
-            box-shadow: var(--shadow);
-            border-radius: var(--border-radius);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: var(--transition);
-            z-index: 1000;
-            border: 1px solid #e5e7eb;
-            padding: 0.5rem 0;
+            top: 0;
+            left: -150%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+            pointer-events: none;
+            z-index: 10;
         }
 
-        .dropdown:hover .dropdown-content,
-        .dropdown.active .dropdown-content {
+        .glass-card:hover::before {
+            left: 150%;
+            transition: 0.7s;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(16, 185, 129, 0.6);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- Visi Section --- */
+        .visi-section {
+            max-width: 900px;
+            margin: 0 auto 80px;
+            text-align: center;
+        }
+
+        .visi-icon {
+            font-size: 4rem;
+            color: var(--primary-green);
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.6));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .visi-text {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            font-weight: 500;
+            color: #fff;
+            font-style: italic;
+        }
+
+        .visi-label {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(16, 185, 129, 0.2);
+            border-radius: 50px;
+            color: #6ee7b7;
+            font-weight: 700;
+            margin-bottom: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        /* --- Misi Grid --- */
+        .misi-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            margin-bottom: 40px;
+            border-left: 5px solid var(--primary-green);
+            padding-left: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin: 0;
+            color: #fff;
+        }
+
+        .misi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+            /* Jarak antar kartu diperlebar agar tidak mepet */
+            padding: 20px;
+            /* Ruang tambahan untuk efek bayangan hover */
+        }
+
+        .misi-card {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .misi-icon-box {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 78, 59, 0.2));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            transition: 0.3s;
+        }
+
+        .misi-card:hover .misi-icon-box {
+            background: var(--primary-green);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+            transform: rotate(10deg);
+        }
+
+        .misi-icon-box i {
+            font-size: 1.8rem;
+            color: #6ee7b7;
+            transition: 0.3s;
+        }
+
+        .misi-card:hover .misi-icon-box i {
+            color: #fff;
+        }
+
+        .misi-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .misi-card p {
+            color: #d1d5db;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            flex-grow: 1;
+        }
+
+        /* --- Animations --- */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-up.visible {
             opacity: 1;
-            visibility: visible;
             transform: translateY(0);
         }
 
-        .dropdown-content li {
-            list-style: none;
-        }
-
-        .dropdown-content a {
-            display: flex;
-            padding: 0.8rem 1.2rem;
-            color: var(--text-dark);
-            text-decoration: none;
-            transition: var(--transition);
-            border-radius: 0;
-            background: transparent;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .dropdown-content a:hover {
-            background: var(--light-green);
-            color: var(--primary-green);
-            padding-left: 1.5rem;
-        }
-
-        /* Mobile Menu */
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            padding: 0.5rem;
-            gap: 4px;
-        }
-
-        .menu-toggle span {
-            width: 25px;
-            height: 3px;
-            background: var(--text-dark);
-            transition: var(--transition);
-            border-radius: 2px;
-        }
-
-        .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-
-        @media (max-width: 768px) {
-            .menu-toggle {
-                display: flex;
-            }
-
-            .nav-links {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: var(--white);
-                flex-direction: column;
-                padding: 1rem 0;
-                box-shadow: var(--shadow);
-                opacity: 0;
-                visibility: hidden;
-                transform: translateY(-20px);
-                transition: var(--transition);
-            }
-
-            .nav-links.active {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0);
-            }
-
-            .nav-links li {
-                width: 100%;
-                text-align: center;
-            }
-
-            .nav-links a {
-                justify-content: center;
-                width: 90%;
-                margin: 0 auto;
-            }
-
-            .dropdown-content {
-                position: static;
-                box-shadow: none;
-                border: none;
-                background: #f9fafb;
-                display: none;
-                opacity: 1;
-                visibility: visible;
-                transform: none;
-                width: 100%;
-            }
-
-            .dropdown.active .dropdown-content {
-                display: block;
-            }
-        }
-
-        .section-title {
-            text-align: center;
-            color: #1b4332;
-            margin-bottom: 40px;
-            font-size: 2.5rem;
-            animation: fadeDown 1s ease-out;
-        }
-
-        .vision-card {
-            background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%);
-            color: white;
-            padding: 60px 40px;
-            border-radius: 20px;
-            text-align: center;
-            margin-bottom: 60px;
-            box-shadow: 0 10px 30px rgba(45, 106, 79, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .vision-card::before {
-            content: '"';
+        /* --- Decorative Elements --- */
+        .glow-blob {
             position: absolute;
-            top: -20px;
-            left: 20px;
-            font-size: 150px;
-            opacity: 0.1;
-            font-family: serif;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
         }
 
-        .vision-text {
-            font-size: 1.5rem;
-            line-height: 1.6;
-            font-weight: 500;
-        }
-
-        .mission-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .mission-card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-            border-left: 5px solid #52b788;
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out forwards;
-        }
-
-        .mission-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .mission-icon {
-            font-size: 2.5rem;
-            color: #2d6a4f;
-            margin-bottom: 15px;
-        }
-
-        .mission-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #1b4332;
-            margin-bottom: 10px;
-        }
-
-        .mission-desc {
-            color: #555;
-            line-height: 1.6;
-        }
-
-        /* ANIMASI */
-        @keyframes fadeDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title h1 {
+                font-size: 2.5rem;
             }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-40px);
+            .visi-text {
+                font-size: 1.2rem;
             }
 
-            to {
-                opacity: 1;
-                transform: translateX(0);
+            .glass-card {
+                padding: 25px;
             }
         }
     </style>
 </head>
 
 <body>
+    <!-- Navbar -->
+    @include('navbar')
 
-    <!-- Header/Navbar -->
-    <header id="header">
-        <nav class="container">
-            <a href="{{ url('/') }}" class="logo">
-                <i class="bi bi-tree"></i>
-                Menadah Untuk Alam
-            </a>
-            <div class="menu-toggle" id="menuToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <ul class="nav-links" id="navLinks">
-                <li>
-                    <a href="{{ url('/#home') }}">
-                        <i class="bi bi-house"></i>
-                        Beranda
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url('/#program') }}">
-                        <i class="bi bi-clipboard-check"></i>
-                        Program
-                    </a>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle">
-                        <i class="bi bi-info-circle"></i>
-                        Tentang
-                        <i class="bi bi-chevron-down" style="font-size: 0.8em; margin-left: 5px;"></i>
-                    </a>
-                    <ul class="dropdown-content">
-                        <li><a href="{{ route('about') }}"><i class="bi bi-people"></i> Tentang Kami</a></li>
-                        <li><a href="{{ route('visimisi') }}"><i class="bi bi-eye"></i> Visi & Misi</a></li>
-                        <li><a href="{{ route('kegiatan') }}"><i class="bi bi-calendar-event"></i> Kegiatan</a></li>
-                        <li><a href="{{ route('fun-fact') }}"><i class="bi bi-lightbulb"></i> Fun Fact</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="{{ route('partnership') }}">
-                        <i class="bi bi-person-up"></i>
-                        Partnership
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('donasi') }}">
-                        <i class="bi bi-heart"></i>
-                        Donasi
-                    </a>
-                </li>
-                @auth
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle">
-                            <i class="bi bi-person-circle"></i> {{ Auth::user()->nama }}
-                            <i class="bi bi-chevron-down" style="font-size: 0.8em; margin-left: 5px;"></i>
-                        </a>
-                        <ul class="dropdown-content">
-                            <li><a href="{{ route('profile.edit') }}"><i class="bi bi-pencil-square"></i> Edit Profil</a>
-                            </li>
-                            <li><a href="#"><i class="bi bi-gear"></i> Pengaturan</a></li>
-                            <li>
-                                <form action="{{ route('logout') }}" method="POST" style="margin:0;">
-                                    @csrf
-                                    <button type="submit"
-                                        style="background:none; border:none; color:inherit; cursor:pointer; font:inherit; padding: 0.8rem 1.2rem; text-align: left; width: 100%; display: flex; align-items: center; gap: 0.5rem;"><i
-                                            class="bi bi-box-arrow-right"></i> Logout</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                @else
-                    <li><a href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
-                    <li><a href="{{ route('register') }}"><i class="bi bi-person-plus"></i> Register</a></li>
-                @endauth
-            </ul>
-        </nav>
-    </header>
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-content">
+    <!-- Parallax Background -->
+    <div class="parallax-wrapper"></div>
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+
+        <!-- Decorative Glows -->
+        <div class="glow-blob" style="top: 10%; left: -10%;"></div>
+        <div class="glow-blob" style="bottom: 20%; right: -10%; width: 600px; height: 600px;"></div>
+
+        <!-- Header -->
+        <div class="container page-title fade-up">
+            <p>Menadah Untuk Alam</p>
             <h1>Visi & Misi</h1>
-            <p>Bersama MUA Menjaga Alam untuk Masa Depan</p>
         </div>
-        <div class="scroll-indicator">
-            <i class="bi bi-chevron-double-down"></i>
-        </div>
-    </section>
-
-    <section style="max-width: 1100px; margin: 60px auto; padding: 0 20px;">
 
         <!-- Visi Section -->
-        <h2 class="section-title">Visi Kami</h2>
-        <div class="vision-card fade-in">
-            <p class="vision-text">
-                "Menjadi garda terdepan dalam konservasi lingkungan berkelanjutan, melestarikan ekosistem pesisir,
-                dan melindungi keanekaragaman hayati demi mewujudkan kehidupan yang harmonis bagi seluruh makhluk di
-                bumi."
-            </p>
+        <div class="container visi-section fade-up">
+            <div class="glass-card">
+                <div class="visi-label">VISI KAMI</div>
+                <div class="visi-icon">
+                    <i class="bi bi-globe-americas"></i>
+                </div>
+                <div class="visi-text">
+                    "{{ $visi->deskripsi ?? 'Menjadi pelopor pelestarian alam yang berkelanjutan demi masa depan bumi yang lebih hijau.' }}"
+                </div>
+            </div>
         </div>
 
         <!-- Misi Section -->
-        <h2 class="section-title">Misi Kami</h2>
-        <div class="mission-grid">
-            <div class="mission-card" style="animation-delay: 0.2s;">
-                <div class="mission-icon"><i class="bi bi-tree"></i></div>
-                <div class="mission-title">Rehabilitasi Hutan</div>
-                <p class="mission-desc">Aktif melestarikan dan merehabilitasi hutan bakau sebagai benteng alami pesisir
-                    dan habitat vital.</p>
+        <div class="misi-container">
+            <div class="section-header fade-up">
+                <h2>Misi Kami</h2>
+                <p style="color: #a7f3d0; margin: 0;">Langkah nyata yang kami lakukan untuk bumi.</p>
             </div>
 
-            <div class="mission-card" style="animation-delay: 0.4s;">
-                <div class="mission-icon"><i class="bi bi-water"></i></div>
-                <div class="mission-title">Pemulihan Laut</div>
-                <p class="mission-desc">Mengembangkan dan merawat terumbu karang untuk memulihkan keseimbangan ekosistem
-                    laut yang rapuh.</p>
-            </div>
-
-            <div class="mission-card" style="animation-delay: 0.6s;">
-                <div class="mission-icon"><i class="bi bi-people"></i></div>
-                <div class="mission-title">Edukasi Masyarakat</div>
-                <p class="mission-desc">Meningkatkan kesadaran masyarakat melalui program edukasi konservasi yang
-                    inovatif dan partisipatif.</p>
-            </div>
-
-            <div class="mission-card" style="animation-delay: 0.8s;">
-                <div class="mission-icon"><i class="bi bi-shield-check"></i></div>
-                <div class="mission-title">Perlindungan Satwa</div>
-                <p class="mission-desc">Melindungi spesies langka dan terancam punah melalui upaya patroli,
-                    rehabilitasi, serta advokasi.</p>
-            </div>
-
-            <div class="mission-card" style="animation-delay: 1.0s;">
-                <div class="mission-icon"><i class="bi bi-globe"></i></div>
-                <div class="mission-title">Kemitraan Global</div>
-                <p class="mission-desc">Membangun kemitraan strategis dengan komunitas lokal, pemerintah, dan
-                    organisasi
-                    internasional.</p>
+            <div class="misi-grid">
+                @foreach ($misi as $index => $item)
+                    <div class="glass-card misi-card fade-up" style="transition-delay: {{ $index * 100 }}ms;">
+                        <div class="misi-icon-box">
+                            <!-- Gunakan icon dari database, fallback jika kosong -->
+                            <i class="{{ $item->icon ?? 'bi bi-tree' }}"></i>
+                        </div>
+                        <h3>{{ $item->judul }}</h3>
+                        <p>{{ $item->deskripsi }}</p>
+                    </div>
+                @endforeach
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-col">
-                    <h4>
-                        <i class="bi bi-tree"></i>
-                        Menadah Untuk Alam
-                    </h4>
-                    <p>
-                        Organisasi nirlaba yang berfokus pada konservasi keanekaragaman
-                        hayati dan pemberdayaan masyarakat Indonesia.
-                    </p>
-                </div>
-                <div class="footer-col">
-                    <h4>
-                        <i class="bi bi-link-45deg"></i>
-                        Tautan Cepat
-                    </h4>
-                    <ul>
-                        <li>
-                            <i class="bi bi-chevron-right"></i>
-                            <a href="{{ route('about') }}">Tentang Kami</a>
-                        </li>
-                        <li>
-                            <i class="bi bi-chevron-right"></i>
-                            <a href="{{ route('visimisi') }}">Visi Misi</a>
-                        </li>
-                        <li>
-                            <i class="bi bi-chevron-right"></i>
-                            <a href="{{ route('kegiatan') }}">Kegiatan</a>
-                        </li>
-                        <li>
-                            <i class="bi bi-chevron-right"></i>
-                            <a href="{{ route('fun-fact') }}">Fun Fact</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>
-                        <i class="bi bi-telephone"></i>
-                        Kontak Kami
-                    </h4>
-                    <ul>
-                        <li>
-                            <i class="bi bi-envelope"></i>
-                            novandidirobi@students.amikom.ac.id
-                        </li>
-                        <li>
-                            <i class="bi bi-phone"></i>
-                            +62 123 4567 890
-                        </li>
-                        <li>
-                            <i class="bi bi-geo-alt"></i>
-                            Daerah Istimewa Yogyakarta, Indonesia
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2024 MUA. Hak Cipta Dilindungi.</p>
-            </div>
-        </div>
-    </footer>
+    @include('partials.footer')
 
     <script>
-        // Mobile menu toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const navLinks = document.getElementById('navLinks');
-
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        // Dropdown functionality
-        const dropdowns = document.querySelectorAll('.dropdown');
-
-        dropdowns.forEach(dropdown => {
-            const toggle = dropdown.querySelector('.dropdown-toggle');
-
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-
-                // On mobile, toggle the dropdown
-                if (window.innerWidth <= 768) {
-                    dropdown.classList.toggle('active');
-
-                    // Close other dropdowns
-                    dropdowns.forEach(otherDropdown => {
-                        if (otherDropdown !== dropdown) {
-                            otherDropdown.classList.remove('active');
-                        }
-                    });
-                }
-            });
-        });
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.dropdown')) {
-                dropdowns.forEach(dropdown => {
-                    dropdown.classList.remove('active');
+        // Scroll Animation Script
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
                 });
-            }
-        });
-
-        // Close mobile menu when clicking on a link
-        navLinks.addEventListener('click', (e) => {
-            if (e.target.tagName === 'A' && !e.target.classList.contains('dropdown-toggle')) {
-                menuToggle.classList.remove('active');
-                navLinks.classList.remove('active');
-                // Close all dropdowns
-                dropdowns.forEach(dropdown => {
-                    dropdown.classList.remove('active');
-                });
-            }
-        });
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Fade in animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Active navigation link
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('section[id]');
-            const navLinks = document.querySelectorAll('.nav-links a');
-
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= sectionTop - 200) {
-                    current = section.getAttribute('id');
-                }
+            }, {
+                threshold: 0.1
             });
 
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
-                }
+            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        });
+
+        // 3D Tilt Effect Script
+        const cards = document.querySelectorAll('.glass-card');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                // Hitung rotasi (Max 10 derajat)
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
+
+                card.style.transform =
+                    `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            });
+
+            card.addEventListener('mouseenter', () => {
+                card.style.transition =
+                    'box-shadow 0.4s ease, background 0.4s ease, border-color 0.4s ease, transform 0.1s linear';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transition =
+                    'box-shadow 0.4s ease, background 0.4s ease, border-color 0.4s ease, transform 0.5s ease';
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
             });
         });
     </script>

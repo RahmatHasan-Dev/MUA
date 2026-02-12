@@ -11,8 +11,19 @@ class Donasi extends Model
 
     protected $table = 'donasi';
     protected $primaryKey = 'id_donasi';
-    protected $guarded = [];
-    
+
+    protected $fillable = [
+        'id_user',
+        'id_campaign',
+        'jenis',
+        'nominal',
+        'status',
+        'snap_token',
+        'catatan',
+        'bukti_transfer',
+        'tanggal',
+    ];
+
     protected $casts = [
         'tanggal' => 'datetime',
     ];
@@ -20,5 +31,10 @@ class Donasi extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function campaign()
+    {
+        return $this->belongsTo(Campaign::class, 'id_campaign');
     }
 }

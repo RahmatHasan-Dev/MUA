@@ -12,9 +12,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Kecualikan route callback Midtrans dari proteksi CSRF
+        // Daftarkan alias middleware di sini
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\IsAdmin::class,
+        ]);
+
+        // Kecualikan route callback dari proteksi CSRF
         $middleware->validateCsrfTokens(except: [
             'api/midtrans-callback',
+            '/payment/notification', // ✅ hasil gabungan
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

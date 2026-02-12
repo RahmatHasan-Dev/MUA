@@ -1,6 +1,6 @@
 <header id="header">
     <nav class="container">
-        <a href="{{ route('home') }}" class="logo">
+        <a href="{{ Auth::check() ? route('user.home') : route('home') }}" class="logo">
             <i class="bi bi-tree"></i>
             Menadah Untuk Alam
         </a>
@@ -10,7 +10,8 @@
             <span></span>
         </div>
         <ul class="nav-links" id="navLinks">
-            <li><a href="{{ route('home') }}"><i class="bi bi-house"></i> Beranda</a></li>
+            <li><a href="{{ Auth::check() ? route('user.home') : route('home') }}"><i class="bi bi-house"></i>
+                    Beranda</a></li>
             <li><a href="{{ route('kegiatan') }}"><i class="bi bi-clipboard-check"></i> Kegiatan</a></li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle"><i class="bi bi-info-circle"></i> Tentang</a>
@@ -25,8 +26,9 @@
 
             @auth
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle">
-                        <i class="bi bi-person-circle"></i>
+                    <a href="#" class="dropdown-toggle" style="display: flex; align-items: center; gap: 8px;">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->nama) }}&background=random&color=fff&size=128"
+                            alt="Profile" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
                         {{ Auth::user()->nama }}
                     </a>
                     <ul class="dropdown-content">
